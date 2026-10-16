@@ -1,0 +1,30 @@
+check,status,detail
+application_present,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\app\streamlit_app.py
+source_package,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\src\edupredict
+final_test_dataset,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+final_test_load,PASS,"51,840 rows"
+production_session,PASS,expected=['2025/2026']; actual=['2025/2026']
+production_feature_contract,PASS,missing=[]; forbidden_used=[]
+classification_model_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+regression_model_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+classification_model_load,PASS,Pipeline
+regression_model_load,PASS,Pipeline
+classification_prediction,PASS,"51,840 predictions; range=0.0001-0.9989"
+regression_prediction,PASS,"51,840 predictions; range=6.07-59.25"
+early_warning_threshold,PASS,"threshold=0.40; flagged=7126; population=51,840"
+prediction_output_contract,PASS,"rows=51,840; columns=['risk_probability', 'early_warning', 'predicted_exam_score']"
+application_source_marker,PASS,streamlit: found=True
+application_source_marker,PASS,edupredict: found=True
+application_source_marker,PASS,model: found=True
+application_source_marker,PASS,Dashboard: found=True
+application_source_marker,PASS,Students: found=True
+application_source_marker,PASS,Attendance: found=True
+streamlit_app_test,PASS,application executed successfully; exceptions=0; dataframes=0; buttons=0; selectboxes=1
+prediction_reproducibility,PASS,classification_error=0.0; regression_error=0.0
+classification_hash,PASS,3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_hash,PASS,f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+previous_gate,PASS,phase7A: status=PASS
+previous_gate,PASS,phase7B: status=PASS
+previous_gate,PASS,phase7C: status=PRODUCTION_RELEASE_READY
+previous_gate,PASS,phase8A: status=PASS
+previous_gate,PASS,phase8B: status=PASS

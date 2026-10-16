@@ -1,0 +1,94 @@
+{
+  "project": "EduPredict",
+  "phase": "9D",
+  "gate": "Data Quality Remediation",
+  "status": "PASS",
+  "timestamp_utc": "2026-10-08T16:29:03.679998+00:00",
+  "dataset": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv",
+  "session": [
+    "2025/2026"
+  ],
+  "rows": 51840,
+  "historical_missing": {
+    "Historical_Subject_Average": 4135,
+    "Historical_Overall_Average": 274
+  },
+  "structural_missing_by_feature": {
+    "Historical_Subject_Average": 4135,
+    "Historical_Overall_Average": 274
+  },
+  "unexpected_missing_by_feature": {
+    "Historical_Subject_Average": 0,
+    "Historical_Overall_Average": 0
+  },
+  "structural_missing_cells": 4409,
+  "unexpected_missing_cells": 0,
+  "non_historical_missing_cells": 0,
+  "duplicate_rows": 0,
+  "historical_count_consistency": {
+    "subject_missing_average_with_count": 0,
+    "overall_missing_average_with_count": 0
+  },
+  "policy": {
+    "first_term_historical_missingness_allowed": true,
+    "unexpected_historical_missingness_allowed": false,
+    "non_historical_missingness_allowed": false,
+    "duplicate_rows_allowed": false,
+    "dataset_modified": false,
+    "model_retrained": false,
+    "imputation_applied": false
+  },
+  "checks": [
+    {
+      "gate": "dataset_exists",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+    },
+    {
+      "gate": "dataset_load",
+      "status": "PASS",
+      "detail": "51,840 rows"
+    },
+    {
+      "gate": "session_contract",
+      "status": "PASS",
+      "detail": "expected=['2025/2026']; actual=['2025/2026']"
+    },
+    {
+      "gate": "Historical_Subject_Average_missing",
+      "status": "PASS",
+      "detail": "observed=4135; first_term=4135"
+    },
+    {
+      "gate": "Historical_Overall_Average_missing",
+      "status": "PASS",
+      "detail": "observed=274; first_term=274"
+    },
+    {
+      "gate": "historical_structural_missingness",
+      "status": "PASS",
+      "detail": "structural=4409; unexpected=0"
+    },
+    {
+      "gate": "non_historical_missingness",
+      "status": "PASS",
+      "detail": "missing=0"
+    },
+    {
+      "gate": "duplicate_rows",
+      "status": "PASS",
+      "detail": "duplicates=0"
+    },
+    {
+      "gate": "historical_count_consistency",
+      "status": "PASS",
+      "detail": "{\"subject_missing_average_with_count\": 0, \"overall_missing_average_with_count\": 0}"
+    },
+    {
+      "gate": "production_data_quality_contract",
+      "status": "PASS",
+      "detail": "First-term historical averages are permitted to be unavailable where no prior history exists; unexpected missingness, duplicate rows, and session-contract failures remain production failures."
+    }
+  ],
+  "failures": []
+}

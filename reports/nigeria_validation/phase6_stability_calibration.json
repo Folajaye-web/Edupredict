@@ -1,0 +1,58 @@
+{
+  "phase": 6,
+  "status": "DIAGNOSTIC_COMPLETE",
+  "protocol": {
+    "purpose": "Frozen Phase 5 final-holdout stability and calibration analysis",
+    "holdout_session": "2025/2026",
+    "model_retrained": false,
+    "model_tuned": false,
+    "threshold_selected": false,
+    "classification_threshold_baseline": 0.5
+  },
+  "rows": {
+    "final_holdout": 51840
+  },
+  "overall_metrics": {
+    "regression": {
+      "mae": 5.17755044147938,
+      "rmse": 6.47483714316934,
+      "r2": 0.6099395097545866
+    },
+    "classification": {
+      "roc_auc": 0.9559722900044815,
+      "pr_auc": 0.7869679434390142,
+      "precision": 0.7138787782877037,
+      "recall": 0.6861880133860663,
+      "f1": 0.6997595594508648,
+      "accuracy": 0.9253279320987654,
+      "brier": 0.05489807298062667,
+      "threshold": 0.5,
+      "tn": 43458,
+      "fp": 1808,
+      "fn": 2063,
+      "tp": 4511,
+      "n": 51840,
+      "positive_prevalence": 0.12681327160493827
+    }
+  },
+  "calibration": {
+    "bins": 10,
+    "mean_absolute_bin_error": 0.02451221798595745,
+    "max_absolute_bin_error": 0.11236208587140084
+  },
+  "outputs": {
+    "calibration": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_calibration.csv",
+    "thresholds": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_thresholds.csv",
+    "predictions": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_holdout_predictions.csv",
+    "subgroups": {
+      "School": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_school_metrics.csv",
+      "Class": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_class_metrics.csv",
+      "Arm": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_arm_metrics.csv",
+      "Term": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_term_metrics.csv",
+      "Subject": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_subject_metrics.csv"
+    }
+  },
+  "interpretation": {
+    "note": "Phase 6 is diagnostic. The 2025/2026 holdout remains frozen. No model or threshold selection is performed from this holdout."
+  }
+}

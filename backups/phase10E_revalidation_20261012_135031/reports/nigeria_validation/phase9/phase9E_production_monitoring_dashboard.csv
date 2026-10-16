@@ -1,0 +1,14 @@
+gate,status,detail
+required_artifact,PASS,phase9A_report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9A_production_prediction_service.json
+required_artifact,PASS,phase9B_report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9B_operational_control_gate.json
+required_artifact,PASS,phase9C_report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9C_production_monitoring_gate.json
+required_artifact,PASS,phase9D_report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9D_continuous_validation_gate.json
+required_artifact,PASS,classification_model: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+required_artifact,PASS,regression_model: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+required_artifact,PASS,production_dataset: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+session_health,PASS,expected=['2025/2026']; actual=['2025/2026']
+phase9D_health_contract,PASS,status=PASS; continuous_validation_contract=True
+classification_model_identity,PASS,expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_model_identity,PASS,expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+production_metric_ranges,PASS,rows=51840; warning_rate=0.137461; risk=0.000121-0.998874; exam_score=6.07-59.25
+data_quality_policy,PASS,structural_missing=4409; unexpected_missing=0; non_historical_missing=0; duplicates=0; invalid_attendance=0; invalid_numeric=0

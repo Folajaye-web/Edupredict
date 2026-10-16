@@ -1,0 +1,10 @@
+﻿test,status,detail
+Pre-flight prerequisites,PASS,"Project, Python, orchestrator and both model files must exist"
+Actual Phase 9G module loads,PASS,Imported run_stage() from the project orchestrator
+Nonzero exit rejected,PASS,status=FAIL; return_code=7
+Downstream stage stopped,PASS,executed=['injected_failure']; marker_exists=False
+Timeout handled,PASS,status=TIMEOUT
+Missing report detected,PASS,status=MISSING
+Corrupt report rejected,PASS,status=UNREADABLE
+Recovery rerun succeeds,PASS,status=PASS; return_code=0
+Production model hashes unchanged,PASS,Both approved model files retain their original SHA-256 hashes

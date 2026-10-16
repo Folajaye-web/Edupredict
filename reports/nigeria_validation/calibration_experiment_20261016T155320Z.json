@@ -1,0 +1,65 @@
+{
+  "experiment": "student_grouped_sigmoid_calibration",
+  "status": "EXPERIMENT_COMPLETE_NOT_PRODUCTION_APPROVAL",
+  "timestamp_utc": "2026-10-16T15:53:20.774058+00:00",
+  "data_used": "validation_2024_2025.csv only",
+  "final_holdout_loaded": false,
+  "method": "Logistic regression on clipped frozen-model log-odds",
+  "split": {
+    "random_state": 20261016,
+    "fit_rows": 31350,
+    "evaluation_rows": 20910,
+    "fit_students": 1045,
+    "evaluation_students": 697,
+    "overlapping_students": 0
+  },
+  "raw_evaluation_metrics": {
+    "rows": 20910,
+    "prevalence": 0.21099952175992348,
+    "brier": 0.04019691482048189,
+    "log_loss": 0.1295776146161419,
+    "roc_auc": 0.9846422220798323,
+    "pr_auc": 0.9498805156004012,
+    "mean_absolute_bin_error": 0.004086121868033809,
+    "maximum_bin_error": 0.016546505954404767,
+    "nonempty_calibration_bins": 10,
+    "threshold": 0.4,
+    "flagged": 4672,
+    "tn": 15741,
+    "fp": 757,
+    "fn": 497,
+    "tp": 3915
+  },
+  "calibrated_evaluation_metrics": {
+    "rows": 20910,
+    "prevalence": 0.21099952175992348,
+    "brier": 0.04028761216490352,
+    "log_loss": 0.128811048675974,
+    "roc_auc": 0.9846422220798323,
+    "pr_auc": 0.9498805156004012,
+    "mean_absolute_bin_error": 0.00634577140260327,
+    "maximum_bin_error": 0.02611140355059438,
+    "nonempty_calibration_bins": 10,
+    "threshold": 0.4,
+    "flagged": 4680,
+    "tn": 15736,
+    "fp": 762,
+    "fn": 494,
+    "tp": 3918
+  },
+  "brier_improvement": -9.06973444216308e-05,
+  "log_loss_improvement": 0.0007665659401678848,
+  "frozen_classifier_sha256_before": "45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12",
+  "frozen_classifier_sha256_after": "45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12",
+  "artifacts": {
+    "candidate_calibrator": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\sigmoid_calibrator_experiment_20261016T155320Z.joblib",
+    "calibration_bins": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\calibration_experiment_bins_20261016T155320Z.csv",
+    "evaluation_predictions": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\calibration_experiment_predictions_20261016T155320Z.csv"
+  },
+  "limitations": [
+    "Internal validation experiment, not independent final confirmation.",
+    "The validation session has also been used in prior model-policy analysis.",
+    "The existing 2025/2026 holdout was not loaded or used for fitting.",
+    "This result does not change Phase 7 release status."
+  ]
+}

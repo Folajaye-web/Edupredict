@@ -1,0 +1,40 @@
+STDOUT
+========================================================================
+EDUPREDICT NIGERIA VALIDATION — PHASE 7A
+========================================================================
+Purpose: Production Artifact & Contract Gate
+
+Checking required artifacts...
+Checking feature contract...
+
+========================================================================
+PHASE 7A RESULT
+========================================================================
+artifact_exists           PASS  data\nigeria_validation\splits\train_2023_2024.csv
+artifact_exists           PASS  data\nigeria_validation\splits\validation_2024_2025.csv
+artifact_exists           PASS  data\nigeria_validation\splits\test_2025_2026.csv
+artifact_exists           PASS  models\nigeria_validation\phase5_classification_hgb.joblib
+artifact_exists           PASS  models\nigeria_validation\phase5_regression_hgb.joblib
+dataset_load              PASS  train_2023_2024.csv
+dataset_load              PASS  validation_2024_2025.csv
+dataset_load              PASS  test_2025_2026.csv
+session_integrity         PASS  train_2023_2024.csv
+session_integrity         PASS  validation_2024_2025.csv
+session_integrity         PASS  test_2025_2026.csv
+feature_contract          PASS  train_2023_2024.csv
+feature_contract          PASS  validation_2024_2025.csv
+feature_contract          PASS  test_2025_2026.csv
+model_loadability         PASS  classification
+model_loadability         PASS  regression
+classification_interface  PASS  predict_proba
+regression_interface      PASS  predict
+artifact_hash             PASS  classification_model
+artifact_hash             PASS  regression_model
+
+PHASE 7A STATUS: PASS
+
+Report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7A_artifact_gate.json
+Checks: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7A_artifact_gate.csv
+========================================================================
+
+STDERR

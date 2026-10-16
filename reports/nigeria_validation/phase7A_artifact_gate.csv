@@ -1,0 +1,21 @@
+gate,item,status,detail
+artifact_exists,data\nigeria_validation\splits\train_2023_2024.csv,PASS,"7,344,711 bytes"
+artifact_exists,data\nigeria_validation\splits\validation_2024_2025.csv,PASS,"7,539,985 bytes"
+artifact_exists,data\nigeria_validation\splits\test_2025_2026.csv,PASS,"7,739,306 bytes"
+artifact_exists,models\nigeria_validation\phase5_classification_hgb.joblib,PASS,"711,602 bytes"
+artifact_exists,models\nigeria_validation\phase5_regression_hgb.joblib,PASS,"1,109,706 bytes"
+dataset_load,train_2023_2024.csv,PASS,"52,830 rows"
+dataset_load,validation_2024_2025.csv,PASS,"52,260 rows"
+dataset_load,test_2025_2026.csv,PASS,"51,840 rows"
+session_integrity,train_2023_2024.csv,PASS,expected=2023/2024; actual=['2023/2024']
+session_integrity,validation_2024_2025.csv,PASS,expected=2024/2025; actual=['2024/2025']
+session_integrity,test_2025_2026.csv,PASS,expected=2025/2026; actual=['2025/2026']
+feature_contract,train_2023_2024.csv,PASS,all production features present
+feature_contract,validation_2024_2025.csv,PASS,all production features present
+feature_contract,test_2025_2026.csv,PASS,all production features present
+model_loadability,classification,PASS,Pipeline
+model_loadability,regression,PASS,Pipeline
+classification_interface,predict_proba,PASS,"51,840 predictions"
+regression_interface,predict,PASS,"51,840 predictions"
+artifact_hash,classification_model,PASS,45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12
+artifact_hash,regression_model,PASS,7a2cffc98c5b024de723a432c3e0d78782d4fb83f46ab66f5466e9485b8eb5ae

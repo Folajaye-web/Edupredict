@@ -1,0 +1,8 @@
+STDOUT
+
+STDERR
+Traceback (most recent call last):
+  File "C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\scripts\nigeria_validation\phase5_final_holdout_validation.py", line 20, in <module>
+    FEATURE_REPORT = ROOT / "reports" / "nigeria_validation" / "feature_build_report.json"
+                     ^^^^
+NameError: name 'ROOT' is not defined

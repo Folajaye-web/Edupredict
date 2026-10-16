@@ -1,0 +1,447 @@
+﻿EDUPREDICT CONSOLIDATED RELEASE AUDIT
+Audit time: 2026-10-16 16:31:56
+Project root: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL
+READ ONLY: existing models, datasets and reports are not modified.
+
+========== PHASE SCRIPTS ==========
+.\scripts\nigeria_validation\phase10A_failure_injection_recovery_validation.py | 9555 bytes
+.\scripts\nigeria_validation\phase10B_production_readiness_audit.py | 9563 bytes
+.\scripts\nigeria_validation\phase10C_controlled_pilot_readiness.py | 11190 bytes
+.\scripts\nigeria_validation\phase10D_school_onboarding.py | 10490 bytes
+.\scripts\nigeria_validation\phase10E_integrated_revalidation.py | 10253 bytes
+.\scripts\nigeria_validation\phase5_final_holdout_validation.py | 7776 bytes
+.\scripts\nigeria_validation\phase6_stability_calibration.py | 17865 bytes
+.\scripts\nigeria_validation\phase7_production_qualification.py | 20012 bytes
+.\scripts\nigeria_validation\phase7A_artifact_gate.py | 13043 bytes
+.\scripts\nigeria_validation\phase7B_subgroup_safety_gate.py | 15486 bytes
+.\scripts\nigeria_validation\phase7C_production_release_gate.py | 26185 bytes
+.\scripts\nigeria_validation\phase8A_production_integration.py | 9613 bytes
+.\scripts\nigeria_validation\phase8B_application_model_validation.py | 16403 bytes
+.\scripts\nigeria_validation\phase8C_end_to_end_operational_validation.py | 16247 bytes
+.\scripts\nigeria_validation\phase9A_production_prediction_service.py | 2688 bytes
+.\scripts\nigeria_validation\phase9B_operational_control_gate.backup.py | 16193 bytes
+.\scripts\nigeria_validation\phase9B_operational_control_gate.py | 16526 bytes
+.\scripts\nigeria_validation\phase9C_production_monitoring_gate.py | 15616 bytes
+.\scripts\nigeria_validation\phase9D_apply_fix.py | 8708 bytes
+.\scripts\nigeria_validation\phase9D_continuous_validation_gate.py | 25886 bytes
+.\scripts\nigeria_validation\phase9D_continuous_validation_gate_backup.py | 33274 bytes
+.\scripts\nigeria_validation\phase9D_data_quality_remediation.py | 34275 bytes
+.\scripts\nigeria_validation\phase9E_production_monitoring_dashboard.py | 13607 bytes
+.\scripts\nigeria_validation\phase9G_continuous_production_orchestrator.py | 9167 bytes
+.\scripts\nigeria_validation\release_manifest.py | 1621 bytes
+.\scripts\nigeria_validation\test_phase9G_failure_handling.py | 1066 bytes
+
+========== JSON REPORT STATUS AND GATES ==========
+
+REPORT: .\reports\model_metrics.json
+
+REPORT: .\reports\nigeria_validation\dataset_audit.json
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\feature_build_report.json
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\phase10\phase10A_failure_injection_recovery.json
+  phase = 10A
+  status = PASS
+  timestamp_utc = 2026-10-10T18:19:08.852718+00:00
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+  tests.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase10\phase10B_production_readiness_audit.json
+  phase = 10B
+  status = PASS
+  timestamp_utc = 2026-10-10T18:39:38.118183+00:00
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase10\phase10C_controlled_pilot_readiness.json
+  phase = 10C
+  timestamp_utc = 2026-10-12T10:38:41.079262+00:00
+  status = BLOCKED
+  pilot_authorised = False
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+  technical_checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase10\phase10D_school_onboarding.json
+  phase = 10D
+  timestamp_utc = 2026-10-12T13:12:04.633972+00:00
+  status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  pilot_authorised = False
+
+REPORT: .\reports\nigeria_validation\phase10\phase10E_integrated_revalidation.json
+  phase = 10E
+  timestamp_utc = 2026-10-12T13:22:01.918268+00:00
+  status = BLOCKED_PHASE7_REVIEW
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = PASS
+  stages.status = FAIL
+
+REPORT: .\reports\nigeria_validation\phase4_benchmark_results.json
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\phase5_final_holdout_results.json
+  phase = 5
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\phase6_stability_calibration.json
+  phase = 6
+  status = DIAGNOSTIC_COMPLETE
+
+REPORT: .\reports\nigeria_validation\phase7_production_contract.json
+  phase = 7
+  status = CONDITIONAL_REVIEW
+  gates.feature_contract = True
+  gates.calibration_review_required = True
+
+REPORT: .\reports\nigeria_validation\phase7_production_qualification.json
+  phase = 7
+  status = CONDITIONAL_REVIEW
+  gates.feature_contract = True
+  gates.calibration_review_required = True
+
+REPORT: .\reports\nigeria_validation\phase7A_artifact_gate.json
+  phase = 7A
+  status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase7B_subgroup_safety_gate.json
+  phase = 7B
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\phase7C_production_release_gate.json
+  phase = 7C
+  status = CONDITIONAL_REVIEW
+  release_ready = False
+  technical_release_ready = False
+  pilot_authorised = False
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = PASS
+  gates.status = FAIL
+  gates.status = PASS
+  gates.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase7C_release_manifest.json
+  status = CONDITIONAL_REVIEW
+  technical_release_ready = False
+  pilot_authorised = False
+
+REPORT: .\reports\nigeria_validation\phase8A_production_integration.json
+  phase = 8A
+  status = PASS
+  timestamp_utc = 2026-10-03T15:23:08Z
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase8B_application_model_validation.json
+  phase = 8B
+  status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase8C_end_to_end_operational_validation.json
+  phase = 8C
+  status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9A_production_prediction_service.json
+  phase = 9A
+  status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9B_operational_control_gate.json
+  phase = 9B
+  status = PASS
+  timestamp_utc = 2026-10-10T17:15:37.048814+00:00
+  controls.feature_contract = True
+
+REPORT: .\reports\nigeria_validation\phase9\phase9B_production_audit_record.json
+  phase = 9B
+  status = PASS
+  timestamp_utc = 2026-10-10T17:15:37.048814+00:00
+  controls.feature_contract = True
+
+REPORT: .\reports\nigeria_validation\phase9\phase9C_production_monitoring_gate.json
+  phase = 9C
+  status = PASS
+  timestamp_utc = 2026-10-10T17:15:47.458714+00:00
+  controls.feature_contract = True
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9D_continuous_validation_gate.json
+  phase = 9D
+  status = PASS
+  timestamp_utc = 2026-10-10T17:16:03.748382+00:00
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9D_data_quality_remediation.json
+  phase = 9D
+  status = PASS
+  timestamp_utc = 2026-10-08T16:29:03.679998+00:00
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9E_production_monitoring_dashboard.json
+  phase = 9E
+  status = PASS
+  timestamp_utc = 2026-10-10T17:16:06.804202+00:00
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+  checks.status = PASS
+
+REPORT: .\reports\nigeria_validation\phase9\phase9G_continuous_production_orchestrator.json
+  phase = 9G
+  status = HEALTH_REVIEW_REQUIRED
+  timestamp_utc = 2026-10-13T10:29:11.548540+00:00
+  stages.status = FAIL
+  failures.status = FAIL
+
+REPORT: .\reports\nigeria_validation\temporal_split_report.json
+  status = PASS
+
+========== DATA SPLITS ==========
+test_2025_2026.csv | 7739306 bytes
+train_2023_2024.csv | 7344711 bytes
+validation_2024_2025.csv | 7539985 bytes
+
+========== MODEL ARTIFACT HASHES ==========
+phase5_classification_hgb.joblib | 711602 bytes | SHA256=45E9EE24A7492260FAC3762DE126610B422F3261C44E90386DFF4411028BDA12
+phase5_regression_hgb.joblib | 1109706 bytes | SHA256=7A2CFFC98C5B024DE723A432C3E0D78782D4FB83F46AB66F5466E9485B8EB5AE
+
+========== CURRENT CALIBRATION SUMMARY ==========
+bin=1; count=5184; positives=0; predicted=6.566216172452134e-05; observed=0.0; error=6.566216172452134e-05
+bin=2; count=5184; positives=0; predicted=0.00010893825271787872; observed=0.0; error=0.00010893825271787872
+bin=3; count=5184; positives=0; predicted=0.00020426065611969197; observed=0.0; error=0.00020426065611969197
+bin=4; count=5184; positives=0; predicted=0.0004151032289113047; observed=0.0; error=0.0004151032289113047
+bin=5; count=5184; positives=12; predicted=0.0009815120107804567; observed=0.0023148148148148147; error=0.001333302804034358
+bin=6; count=5184; positives=58; predicted=0.002978025656465789; observed=0.011188271604938271; error=0.008210245948472483
+bin=7; count=5184; positives=206; predicted=0.01139500109002775; observed=0.03973765432098766; error=0.028342653230959906
+bin=8; count=5184; positives=649; predicted=0.058231848574157814; observed=0.1251929012345679; error=0.06696105266041008
+bin=9; count=5184; positives=1659; predicted=0.34714202319297155; observed=0.32002314814814814; error=0.02711887504482341
+bin=10; count=5184; positives=3990; predicted=0.8820380117973268; observed=0.7696759259259259; error=0.11236208587140084

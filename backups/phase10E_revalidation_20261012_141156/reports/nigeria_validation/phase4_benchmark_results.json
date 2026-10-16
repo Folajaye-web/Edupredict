@@ -1,0 +1,144 @@
+{
+  "status": "PASS",
+  "training_file": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\train_2023_2024.csv",
+  "validation_file": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\validation_2024_2025.csv",
+  "final_test_used": false,
+  "training_rows": 52830,
+  "validation_rows": 52260,
+  "features": [
+    "School",
+    "Academic_Session",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count"
+  ],
+  "categorical_features": [
+    "School",
+    "Academic_Session",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject"
+  ],
+  "numeric_features": [
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count"
+  ],
+  "forbidden_predictors": [
+    "Exam",
+    "Total",
+    "Grade",
+    "Final_Year_Result",
+    "Promotion_Status",
+    "Intervention"
+  ],
+  "forbidden_predictors_present": [],
+  "classification_validation_prevalence": 0.20757749712973594,
+  "regression": {
+    "previous_term_baseline": {
+      "mae": 27.44601990049751,
+      "rmse": 28.941155641376874,
+      "r2": -8.091827536416497
+    },
+    "previous_year_baseline": {
+      "mae": 27.470711825487943,
+      "rmse": 28.728425606199608,
+      "r2": -7.958661013188543
+    },
+    "linear_regression": {
+      "mae": 3.691177195348459,
+      "rmse": 4.651156725835715,
+      "r2": 0.7651765854024872
+    },
+    "random_forest": {
+      "mae": 3.751687897300252,
+      "rmse": 4.749720339176145,
+      "r2": 0.7551187519209495
+    },
+    "hist_gradient_boosting": {
+      "mae": 3.6449091689758566,
+      "rmse": 4.606480728319497,
+      "r2": 0.7696660430456351
+    }
+  },
+  "classification": {
+    "previous_term_baseline": {
+      "roc_auc": 0.8044945530088752,
+      "pr_auc": 0.5406083331841078,
+      "precision": 0.6901096875288045,
+      "recall": 0.6901733038348082,
+      "f1": 0.6901414942157902,
+      "accuracy": 0.8713547646383467,
+      "brier": 0.12864523536165326,
+      "threshold": 0.5
+    },
+    "previous_year_baseline": {
+      "roc_auc": 0.7527058656846932,
+      "pr_auc": 0.47542756758152493,
+      "precision": 0.6687898089171974,
+      "recall": 0.5807522123893806,
+      "f1": 0.6216696269982238,
+      "accuracy": 0.8532721010332951,
+      "brier": 0.14672789896670493,
+      "threshold": 0.5
+    },
+    "logistic_regression": {
+      "roc_auc": 0.97350357820628,
+      "pr_auc": 0.9125322499492463,
+      "precision": 0.6806621720846405,
+      "recall": 0.9399889380530974,
+      "f1": 0.7895776065662627,
+      "accuracy": 0.8960007654037505,
+      "brier": 0.07549465053555107,
+      "threshold": 0.5
+    },
+    "random_forest": {
+      "roc_auc": 0.9753114242213007,
+      "pr_auc": 0.9175444747703989,
+      "precision": 0.7736622207938293,
+      "recall": 0.8876290560471977,
+      "f1": 0.8267364986691852,
+      "accuracy": 0.9227707615767318,
+      "brier": 0.05508557938831099,
+      "threshold": 0.5
+    },
+    "hist_gradient_boosting": {
+      "roc_auc": 0.9765795577970788,
+      "pr_auc": 0.9208733582850345,
+      "precision": 0.7430571066934704,
+      "recall": 0.9199852507374632,
+      "f1": 0.8221096420775156,
+      "accuracy": 0.9173555300420972,
+      "brier": 0.059042078049504114,
+      "threshold": 0.5
+    }
+  },
+  "random_state": 42
+}

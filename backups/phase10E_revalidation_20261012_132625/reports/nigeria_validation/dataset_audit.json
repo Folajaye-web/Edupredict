@@ -1,0 +1,67 @@
+{
+  "dataset": "C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv",
+  "rows": 156930,
+  "columns": 23,
+  "required_columns_missing": [],
+  "duplicate_rows": 0,
+  "duplicate_prediction_keys": 0,
+  "range_violations": {
+    "CA1": 0,
+    "CA2": 0,
+    "Assignment": 0,
+    "Project": 0,
+    "Exam": 0,
+    "Total": 0,
+    "Attendance": 0,
+    "Previous_Term_Total": 0,
+    "Previous_Year_Average": 0
+  },
+  "total_formula_errors": 0,
+  "grade_formula_errors": 0,
+  "sessions": {
+    "2023/2024": 52830,
+    "2024/2025": 52260,
+    "2025/2026": 51840
+  },
+  "terms": {
+    "First Term": 52310,
+    "Second Term": 52310,
+    "Third Term": 52310
+  },
+  "schools": 12,
+  "students": 2304,
+  "subjects": 20,
+  "classes": 6,
+  "arms": 2,
+  "behaviour_categories": {
+    "Good": 50410,
+    "Fair": 40430,
+    "Poor": 38750,
+    "Excellent": 27340
+  },
+  "temporal_checks": {
+    "previous_term_comparable_rows": 131100,
+    "previous_term_matches": 131100,
+    "previous_term_mismatches": 0,
+    "previous_term_no_prior_record": 25830,
+    "previous_term_mismatch_rate_pct": 0.0,
+    "final_year_result_by_term": {
+      "First Term": 0,
+      "Second Term": 0,
+      "Third Term": 52310
+    },
+    "promotion_status_by_term": {
+      "First Term": 0,
+      "Second Term": 0,
+      "Third Term": 52310
+    }
+  },
+  "leakage_columns": [
+    "Exam",
+    "Total",
+    "Grade",
+    "Final_Year_Result",
+    "Promotion_Status"
+  ],
+  "status": "PASS"
+}

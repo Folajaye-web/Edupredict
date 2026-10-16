@@ -1,0 +1,169 @@
+{
+  "project": "EduPredict",
+  "phase": "7A",
+  "gate": "Production Artifact and Contract Gate",
+  "status": "PASS",
+  "features": [
+    "School",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count"
+  ],
+  "forbidden_predictors": [
+    "Exam",
+    "Final_Year_Result",
+    "Grade",
+    "Intervention",
+    "Promotion_Status",
+    "Total"
+  ],
+  "expected_sessions": {
+    "data\\nigeria_validation\\splits\\train_2023_2024.csv": "2023/2024",
+    "data\\nigeria_validation\\splits\\validation_2024_2025.csv": "2024/2025",
+    "data\\nigeria_validation\\splits\\test_2025_2026.csv": "2025/2026"
+  },
+  "artifacts": {
+    "classification_model": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib",
+    "regression_model": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib",
+    "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+  },
+  "checks": [
+    {
+      "gate": "artifact_exists",
+      "item": "data\\nigeria_validation\\splits\\train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "7,888,777 bytes"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "data\\nigeria_validation\\splits\\validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "8,031,834 bytes"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "data\\nigeria_validation\\splits\\test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "8,096,985 bytes"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "models\\nigeria_validation\\phase5_classification_hgb.joblib",
+      "status": "PASS",
+      "detail": "614,506 bytes"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "models\\nigeria_validation\\phase5_regression_hgb.joblib",
+      "status": "PASS",
+      "detail": "1,110,730 bytes"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "52,830 rows"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "52,260 rows"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "51,840 rows"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "expected=2023/2024; actual=['2023/2024']"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "expected=2024/2025; actual=['2024/2025']"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "expected=2025/2026; actual=['2025/2026']"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "all production features present"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "all production features present"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "all production features present"
+    },
+    {
+      "gate": "model_loadability",
+      "item": "classification",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "gate": "model_loadability",
+      "item": "regression",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "gate": "classification_interface",
+      "item": "predict_proba",
+      "status": "PASS",
+      "detail": "51,840 predictions"
+    },
+    {
+      "gate": "regression_interface",
+      "item": "predict",
+      "status": "PASS",
+      "detail": "51,840 predictions"
+    },
+    {
+      "gate": "artifact_hash",
+      "item": "classification_model",
+      "status": "PASS",
+      "detail": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+    },
+    {
+      "gate": "artifact_hash",
+      "item": "regression_model",
+      "status": "PASS",
+      "detail": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+    }
+  ],
+  "failures": []
+}

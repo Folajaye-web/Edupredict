@@ -1,0 +1,290 @@
+﻿from __future__ import annotations
+
+import csv
+import hashlib
+import importlib.util
+import json
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+REPORT_DIR = ROOT / "reports" / "nigeria_validation" / "phase10"
+ORCHESTRATOR = (
+    ROOT / "scripts" / "nigeria_validation"
+    / "phase9G_continuous_production_orchestrator.py"
+)
+PYTHON = Path(sys.executable)
+
+MODELS = [
+    ROOT / "models" / "nigeria_validation"
+    / "phase5_classification_hgb.joblib",
+    ROOT / "models" / "nigeria_validation"
+    / "phase5_regression_hgb.joblib",
+]
+
+RESULTS = []
+
+
+def sha256(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for chunk in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def record(name: str, passed: bool, detail: str) -> None:
+    RESULTS.append({
+        "test": name,
+        "status": "PASS" if passed else "FAIL",
+        "detail": detail,
+    })
+    print(f"{'PASS' if passed else 'FAIL'}: {name} - {detail}")
+
+
+def load_orchestrator():
+    spec = importlib.util.spec_from_file_location(
+        "phase9g_test_module", ORCHESTRATOR
+    )
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Cannot load Phase 9G orchestrator.")
+    module = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(module)
+    return module
+
+
+def main() -> int:
+    print("=" * 72)
+    print("EDUPREDICT PHASE 10A - FAILURE AND RECOVERY VALIDATION")
+    print("=" * 72)
+    print(f"Project: {ROOT}")
+    print(f"Python:  {PYTHON}")
+    print("Safety: isolated temporary scripts; no intentional changes to models or DB")
+    print()
+
+    prerequisites = (
+        ROOT.is_dir()
+        and PYTHON.is_file()
+        and ORCHESTRATOR.is_file()
+        and all(path.is_file() for path in MODELS)
+    )
+    record(
+        "Pre-flight prerequisites",
+        prerequisites,
+        "Project, Python, orchestrator and both model files must exist",
+    )
+
+    if not prerequisites:
+        print("Cannot continue: required production artifacts are missing.")
+        return 1
+
+    before_hashes = {str(path): sha256(path) for path in MODELS}
+
+    try:
+        module = load_orchestrator()
+        record(
+            "Actual Phase 9G module loads",
+            callable(module.run_stage),
+            "Imported run_stage() from the project orchestrator",
+        )
+    except Exception as exc:
+        record("Actual Phase 9G module loads", False, repr(exc))
+        return write_reports(before_hashes, "FAIL")
+
+    try:
+        with tempfile.TemporaryDirectory(prefix="edupredict_phase10a_") as td:
+            sandbox = Path(td)
+            fake_report = sandbox / "test_stage_report.json"
+            fake_report.write_text(
+                json.dumps({"status": "PASS"}), encoding="utf-8"
+            )
+
+            original_read_stage_status = module.read_stage_status
+
+            module.read_stage_status = lambda stage: (
+                "PASS", str(fake_report)
+            )
+
+            # Test 1: A nonzero exit must never be treated as PASS.
+            failed_script = sandbox / "exit_failure.py"
+            failed_script.write_text(
+                "import sys\nsys.exit(7)\n", encoding="utf-8"
+            )
+            result = module.run_stage("test_failure", failed_script)
+            record(
+                "Nonzero exit rejected",
+                result["status"] == "FAIL"
+                and result["return_code"] == 7,
+                f"status={result['status']}; return_code={result['return_code']}",
+            )
+
+            # Test 2: A later stage must not run after a failed stage.
+            marker = sandbox / "downstream_ran.txt"
+            stage_one = sandbox / "stage_one_fails.py"
+            stage_two = sandbox / "stage_two_marker.py"
+            stage_one.write_text(
+                "import sys\nsys.exit(9)\n", encoding="utf-8"
+            )
+            stage_two.write_text(
+                f"from pathlib import Path\n"
+                f"Path({str(marker)!r}).write_text('ran')\n",
+                encoding="utf-8",
+            )
+
+            executed = []
+            for name, path in [
+                ("injected_failure", stage_one),
+                ("downstream_marker", stage_two),
+            ]:
+                stage_result = module.run_stage(name, path)
+                executed.append(name)
+                if stage_result["status"] != "PASS":
+                    break
+
+            record(
+                "Downstream stage stopped",
+                executed == ["injected_failure"] and not marker.exists(),
+                f"executed={executed}; marker_exists={marker.exists()}",
+            )
+
+            # Test 3: Verify timeout handling through the actual handler.
+            from unittest.mock import patch
+
+            with patch.object(
+                module.subprocess,
+                "run",
+                side_effect=subprocess.TimeoutExpired(
+                    cmd="isolated-timeout-test", timeout=1800
+                ),
+            ):
+                timeout_result = module.run_stage(
+                    "test_timeout", failed_script
+                )
+
+            record(
+                "Timeout handled",
+                timeout_result["status"] == "TIMEOUT"
+                and timeout_result["completed_utc"] is not None,
+                f"status={timeout_result['status']}",
+            )
+
+            # Test 4: Missing and unreadable reports must be detected.
+            # Restore the real reader before testing missing/corrupt reports.
+            module.read_stage_status = original_read_stage_status
+            module.REPORT_DIR = sandbox / "reports"
+            module.REPORT_DIR.mkdir()
+
+            missing_status, _ = module.read_stage_status("missing_case")
+            record(
+                "Missing report detected",
+                missing_status == "MISSING",
+                f"status={missing_status}",
+            )
+
+            corrupt_path = (
+                module.REPORT_DIR
+                / "corrupt_case_production_prediction_service.json"
+            )
+            corrupt_path.write_text("{invalid json", encoding="utf-8")
+            corrupt_status, _ = module.read_stage_status("corrupt_case")
+            record(
+                "Corrupt report rejected",
+                corrupt_status == "UNREADABLE",
+                f"status={corrupt_status}",
+            )
+
+            # Test 5: A clean rerun can pass after the injected failure.
+            recovery_script = sandbox / "recovery_success.py"
+            recovery_script.write_text(
+                "print('isolated recovery succeeded')\n",
+                encoding="utf-8",
+            )
+            original_read_stage_status = module.read_stage_status
+
+            module.read_stage_status = lambda stage: (
+                "PASS", str(fake_report)
+            )
+            recovery_result = module.run_stage(
+                "test_recovery", recovery_script
+            )
+            record(
+                "Recovery rerun succeeds",
+                recovery_result["status"] == "PASS"
+                and recovery_result["return_code"] == 0,
+                f"status={recovery_result['status']}; "
+                f"return_code={recovery_result['return_code']}",
+            )
+
+    except Exception as exc:
+        record("Isolated test execution", False, repr(exc))
+
+    after_hashes = {str(path): sha256(path) for path in MODELS}
+    record(
+        "Production model hashes unchanged",
+        before_hashes == after_hashes,
+        "Both approved model files retain their original SHA-256 hashes",
+    )
+
+    final_status = (
+        "PASS"
+        if RESULTS and all(item["status"] == "PASS" for item in RESULTS)
+        else "FAIL"
+    )
+    return write_reports(before_hashes, final_status)
+
+
+def write_reports(model_hashes: dict, status: str) -> int:
+    REPORT_DIR.mkdir(parents=True, exist_ok=True)
+    timestamp = datetime.now(timezone.utc).isoformat()
+
+    payload = {
+        "project": "EduPredict",
+        "phase": "10A",
+        "status": status,
+        "timestamp_utc": timestamp,
+        "purpose": "Isolated failure-injection and recovery validation",
+        "production_database_modified": False,
+        "production_models_modified": False,
+        "tests": RESULTS,
+        "tests_passed": sum(
+            item["status"] == "PASS" for item in RESULTS
+        ),
+        "tests_failed": sum(
+            item["status"] == "FAIL" for item in RESULTS
+        ),
+        "production_model_hashes_before": model_hashes,
+        "orchestrator": str(ORCHESTRATOR),
+    }
+
+    json_path = REPORT_DIR / "phase10A_failure_injection_recovery.json"
+    csv_path = REPORT_DIR / "phase10A_failure_injection_recovery.csv"
+
+    json_path.write_text(
+        json.dumps(payload, indent=2), encoding="utf-8"
+    )
+
+    with csv_path.open("w", newline="", encoding="utf-8-sig") as stream:
+        writer = csv.DictWriter(
+            stream, fieldnames=["test", "status", "detail"]
+        )
+        writer.writeheader()
+        writer.writerows(RESULTS)
+
+    print()
+    print("=" * 72)
+    print(f"PHASE 10A STATUS: {status}")
+    print(f"Tests passed: {payload['tests_passed']}")
+    print(f"Tests failed: {payload['tests_failed']}")
+    print(f"JSON report: {json_path}")
+    print(f"CSV report:  {csv_path}")
+    print("=" * 72)
+
+    return 0 if status == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+

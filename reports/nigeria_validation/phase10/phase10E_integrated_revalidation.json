@@ -1,0 +1,122 @@
+{
+  "project": "EduPredict",
+  "phase": "10E",
+  "timestamp_utc": "2026-10-12T13:22:01.918268+00:00",
+  "status": "BLOCKED_PHASE7_REVIEW",
+  "purpose": "Single backup-first revalidation workflow to align the historical feature pipeline and dependent quality gates.",
+  "dataset": "C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv",
+  "dataset_sha256": "658033f1e5e67d9b6cdc2b082a51dcb0aa2ac4d184530fefe262303af95e7c67",
+  "feature_pipeline_version_expected": "2.0-period-safe-school-aware",
+  "runtime_scikit_learn": "1.9.0",
+  "backup_directory": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\backups\\phase10E_revalidation_20261012_141156",
+  "stages": [
+    {
+      "stage": "dataset_audit",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\audit_dataset.py",
+      "started_utc": "2026-10-12T13:11:56.356937+00:00",
+      "return_code": 0,
+      "stdout_tail": "======================================================================\nEDUPREDICT NIGERIAN DATASET MODEL-QUALITY AUDIT\n======================================================================\nDataset: C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv\n\nRows: 156,930\nColumns: 23\n\n[1] Required columns: PASS\n[2] Duplicate complete rows: 0\n    Duplicate prediction keys: 0\n\n[3] Numeric range checks\n    CA1                     :      0 violations\n    CA2                     :      0 violations\n    Assignment              :      0 violations\n    Project                 :      0 violations\n    Exam                    :      0 violations\n    Total                   :      0 violations\n    Attendance              :      0 violations\n    Previous_Term_Total     :      0 violations\n    Previous_Year_Average   :      0 violations\n\n[4] Total formula errors: 0\n[5] Grade consistency errors: 0\n\n[6] Dataset dimensions\n    2023/2024: 52,830\n    2024/2025: 52,260\n    2025/2026: 51,840\n    First Term: 52,310\n    Second Term: 52,310\n    Third Term: 52,310\n    Schools:   12\n    Students:  2304\n    Subjects:  20\n    Classes:   6\n    Arms:      2\n\n[7] Behaviour/Engagement categories\n    Good: 50,410\n    Fair: 40,430\n    Poor: 38,750\n    Excellent: 27,340\n\n[8] Temporal reconstruction\n    Comparable rows: 131,100\n    Matches:         131,100\n    Mismatches:      0\n    Mismatch rate:   0.0000%\n\n[9] End-of-year field timing\n    Final_Year_Result:\n      First Term: 0\n      Second Term: 0\n      Third Term: 52,310\n    Promotion_Status:\n      First Term: 0\n      Second Term: 0\n      Third Term: 52,310\n\n[10] Leakage boundary\n    EXCLUDED from predictors:\n      - Exam\n      - Total\n      - Grade\n      - Final_Year_Result\n      - Promotion_Status\n\n======================================================================\nAUDIT STATUS: PASS\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\dataset_audit.json\n======================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:12:01.978716+00:00"
+    },
+    {
+      "stage": "phase10D_onboarding_validation",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase10D_school_onboarding.py",
+      "started_utc": "2026-10-12T13:12:01.981186+00:00",
+      "return_code": 0,
+      "stdout_tail": "====================================================================\nEDUPREDICT PHASE 10D \u2014 SCHOOL ONBOARDING VALIDATION\n====================================================================\nStatus: PASS\nInput: C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv\nRows: 156930\nFailed checks: 0\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\phase10D_school_onboarding.json\nDatabase modified: False\nModels modified: False\nImport performed: False\nPilot authorised: False\n====================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:12:04.794089+00:00"
+    },
+    {
+      "stage": "feature_build",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\build_features.py",
+      "started_utc": "2026-10-12T13:12:04.795538+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT \u2014 CORRECTED LEAKAGE-SAFE FEATURE BUILDER\n========================================================================\nInput rows: 156,930\nOutput rows: 156,930\nSchools: 12; school/student pairs: 2,304\nSubject temporal violations: 0\nOverall temporal violations: 0\nSame-term outcomes used in history: False\nFeature file: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\leakage_safe_features.csv\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\feature_build_report.json\nPHASE 2 FEATURE BUILD: PASS\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:19:40.071076+00:00"
+    },
+    {
+      "stage": "temporal_splits",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\create_temporal_splits.py",
+      "started_utc": "2026-10-12T13:19:40.076479+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT PHASE 3\nTIME-AWARE HISTORICAL TRAIN / VALIDATION / TEST SPLIT\n========================================================================\nInput rows: 156,930\nInput columns: 24\n\n[1] Session inventory\n    2023/2024\n    2024/2025\n    2025/2026\n[2] Chronological session ordering: PASS\n\n[3] Split sizes\n    Train:      52,830\n    Validation: 52,260\n    Test:       51,840\n[4] One-session-per-split check: PASS\n[5] Session overlap check: PASS\n[6] Strict chronological ordering: PASS\n\n[7] Student continuity analysis\n    Train students: 1,761\n    Validation students: 1,742\n    Test students: 1,728\n    Train -> Validation overlap: 1,473\n    Train -> Test overlap: 1,185\n    Validation -> Test overlap: 1,454\n\n[8] Predictor leakage boundary: PASS\n\n[9] Target distributions\n    Train      : rows=52,830, below-credit=20.73%, exam_mean=34.35\n    Validation : rows=52,260, below-credit=20.76%, exam_mean=34.40\n    Test       : rows=51,840, below-credit=12.68%, exam_mean=37.49\n\n========================================================================\nPHASE 3 STATUS: PASS\n========================================================================\n\nTraining:\nC:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\train_2023_2024.csv\n\nValidation:\nC:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\validation_2024_2025.csv\n\nFinal test:\nC:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv\n\nReport:\nC:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\temporal_split_report.json\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:19:46.984172+00:00"
+    },
+    {
+      "stage": "phase5_holdout",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase5_final_holdout_validation.py",
+      "started_utc": "2026-10-12T13:19:46.986678+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 5\n========================================================================\nDevelopment: 2023/2024 + 2024/2025 | FINAL HOLDOUT: 2025/2026\n\nRegression validation: MAE=3.6434 RMSE=4.6040 R2=0.7699\nRegression FINAL:      MAE=5.1776 RMSE=6.4748 R2=0.6099\n\nClassification validation: ROC-AUC=0.9765 PR-AUC=0.9213 F1=0.8287 Brier=0.0492\nClassification FINAL:      ROC-AUC=0.9560 PR-AUC=0.7870 Precision=0.7139 Recall=0.6862 F1=0.6998 Brier=0.0549\nConfusion matrix: {'tn': 43458, 'fp': 1808, 'fn': 2063, 'tp': 4511}\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase5_final_holdout_results.json\nModels: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\n\nPHASE 5 STATUS: PASS\nProduction release is NOT authorized by Phase 5 alone.\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:20:35.220155+00:00"
+    },
+    {
+      "stage": "phase6_calibration",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase6_stability_calibration.py",
+      "started_utc": "2026-10-12T13:20:35.225828+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 6\n========================================================================\nPurpose: frozen Phase 5 model stability, calibration and error analysis\nFinal holdout: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv\nHoldout rows: 51,840\n\nOVERALL FROZEN MODEL RESULTS\nRegression MAE:  5.1776\nRegression RMSE: 6.4748\nRegression R2:   0.6099\n\nROC-AUC: 0.9560\nPR-AUC:  0.7870\nPrecision: 0.7139\nRecall: 0.6862\nF1: 0.6998\nBrier: 0.0549\n\nCalibration mean absolute bin error: 0.0245\nCalibration maximum bin error: 0.1124\n\nCalibration report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_calibration.csv\nThreshold report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_thresholds.csv\nPrediction evidence: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_holdout_predictions.csv\nPhase 6 report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase6_stability_calibration.json\n\nPHASE 6 STATUS: DIAGNOSTIC_COMPLETE\nNo production release decision is made by Phase 6.\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:20:50.409020+00:00"
+    },
+    {
+      "stage": "phase7_qualification",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase7_production_qualification.py",
+      "started_utc": "2026-10-12T13:20:50.411946+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 7\n========================================================================\nPurpose: Production Qualification / Release Gate\n\nTraining rows:       52,830\nValidation rows:     52,260\nDevelopment rows:    105,090\nFinal test rows:     51,840\n\n\nLoading frozen Phase 5 models...\nClassification model: LOADED\nRegression model:     LOADED\n\n========================================================================\nPHASE 7 PRODUCTION QUALIFICATION\n========================================================================\n\nFrozen classification ROC-AUC: 0.9560\nFrozen classification PR-AUC:  0.7870\nFrozen classification F1 @ 0.50: 0.6998\nRegression MAE: 5.1776\n\nDevelopment-selected threshold: 0.40\nFinal-test F1 @ selected threshold: 0.6983\nFinal-test precision: 0.6719\nFinal-test recall: 0.7270\n\nCalibration MAE: 0.0046\nCalibration maximum error: 0.0157\n\nArtifact integrity: PASS\nSession integrity: PASS\nFeature contract: PASS\nReproducibility: PASS\nCalibration review: REQUIRED\n\nPHASE 7 STATUS: CONDITIONAL_REVIEW\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7_production_qualification.json\nContract: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7_production_contract.json\nThresholds: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7_threshold_policy.csv\nSubgroups: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7_subgroup_gate.csv\n========================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:21:09.036414+00:00"
+    },
+    {
+      "stage": "phase7A_artifact_gate",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase7A_artifact_gate.py",
+      "started_utc": "2026-10-12T13:21:09.039235+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 7A\n========================================================================\nPurpose: Production Artifact & Contract Gate\n\nChecking required artifacts...\nChecking feature contract...\n\n========================================================================\nPHASE 7A RESULT\n========================================================================\nartifact_exists           PASS  data\\nigeria_validation\\splits\\train_2023_2024.csv\nartifact_exists           PASS  data\\nigeria_validation\\splits\\validation_2024_2025.csv\nartifact_exists           PASS  data\\nigeria_validation\\splits\\test_2025_2026.csv\nartifact_exists           PASS  models\\nigeria_validation\\phase5_classification_hgb.joblib\nartifact_exists           PASS  models\\nigeria_validation\\phase5_regression_hgb.joblib\ndataset_load              PASS  train_2023_2024.csv\ndataset_load              PASS  validation_2024_2025.csv\ndataset_load              PASS  test_2025_2026.csv\nsession_integrity         PASS  train_2023_2024.csv\nsession_integrity         PASS  validation_2024_2025.csv\nsession_integrity         PASS  test_2025_2026.csv\nfeature_contract          PASS  train_2023_2024.csv\nfeature_contract          PASS  validation_2024_2025.csv\nfeature_contract          PASS  test_2025_2026.csv\nmodel_loadability         PASS  classification\nmodel_loadability         PASS  regression\nclassification_interface  PASS  predict_proba\nregression_interface      PASS  predict\nartifact_hash             PASS  classification_model\nartifact_hash             PASS  regression_model\n\nPHASE 7A STATUS: PASS\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7A_artifact_gate.json\nChecks: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7A_artifact_gate.csv\n========================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:21:19.421331+00:00"
+    },
+    {
+      "stage": "phase7B_subgroup_gate",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase7B_subgroup_safety_gate.py",
+      "started_utc": "2026-10-12T13:21:19.423755+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 7B\n========================================================================\nPurpose: Subgroup Safety / Stability Gate\n\nChecking final-test dataset...\nPASS: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv\n\nChecking frozen classification model...\nPASS: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib\n\nFinal-test rows: 51,840\nSession integrity: PASS\nFeature contract: PASS\nClassification model: LOADED\nClassification interface: PASS\n\nChecking School subgroups...\n\nChecking Class subgroups...\n\nChecking Arm subgroups...\n\nChecking Term subgroups...\n\nChecking Subject subgroups...\n\n========================================================================\nPHASE 7B RESULT\n========================================================================\nGlobal ROC-AUC:  0.9560\nGlobal PR-AUC:   0.7870\nGlobal F1:       0.6983\nGlobal recall:   0.7270\nGlobal precision: 0.6719\n\nSubgroups checked: 43\nPASS:             43\nFAIL:             0\nREVIEW:           0\n\n\nPHASE 7B STATUS: PASS\n\nDetailed results: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7B_subgroup_safety_gate.csv\nDimension summary: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7B_dimension_summary.csv\nContract:         C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7B_subgroup_safety_gate.json\n========================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T13:21:39.466078+00:00"
+    },
+    {
+      "stage": "phase7C_technical_release_gate",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase7C_production_release_gate.py",
+      "started_utc": "2026-10-12T13:21:39.469532+00:00",
+      "return_code": 1,
+      "stdout_tail": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 7C\n========================================================================\nPurpose: Production Release Gate\n\nChecking required production artifacts...\nRequired artifact gate: PASS\n\nLoading frozen temporal datasets...\n\nCalculating frozen model hashes...\nClassification SHA256: 45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12\nRegression SHA256:     7a2cffc98c5b024de723a432c3e0d78782d4fb83f46ab66f5466e9485b8eb5ae\n\nLoading frozen models...\n\nRunning final-test prediction smoke test...\n\nChecking prediction reproducibility...\n\nReading Phase 7A gate...\n\nReading Phase 7B gate...\n\nChecking frozen threshold policy...\n\nChecking Phase 7 production contract...\n\nRecording production environment...\n\n========================================================================\nPHASE 7C PRODUCTION RELEASE GATE\n========================================================================\n\nPhase 7A:              PASS\nPhase 7B:              PASS\nThreshold policy:      PASS\nProduction contract:   FAIL\nClassification smoke:  PASS\nRegression smoke:      PASS\nReproducibility:       PASS\nFinal-test rows:       51,840\nClassification SHA256: 45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12\nRegression SHA256:     7a2cffc98c5b024de723a432c3e0d78782d4fb83f46ab66f5466e9485b8eb5ae\n\nRELEASE BLOCKERS:\n  - Production contract invalid: qualification_status=CONDITIONAL_REVIEW; required=TECHNICAL_QUALIFICATION_PASS; or feature/forbidden-predictor/threshold contract mismatch\n\nPHASE 7C STATUS: CONDITIONAL_REVIEW\n\nReport:   C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7C_production_release_gate.json\nChecks:   C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7C_production_release_gate.csv\nManifest: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7C_release_manifest.json\n========================================================================\n",
+      "stderr_tail": "",
+      "status": "FAIL",
+      "completed_utc": "2026-10-12T13:22:01.904060+00:00"
+    }
+  ],
+  "stop_reason": "Phase 7C did not clear technical release. Phase 8/9/10 downstream stages were intentionally not run. Review the Phase 7C report and calibration/qualification evidence.",
+  "database_modified": false,
+  "production_model_directory_modified": false,
+  "candidate_model_directory_rebuilt": true,
+  "school_file_import_performed": false,
+  "automatic_model_replacement": false,
+  "automatic_pilot_authorisation": false,
+  "next_step": "Resolve the Phase 7 calibration/qualification review before Phase 8/9 integration."
+}

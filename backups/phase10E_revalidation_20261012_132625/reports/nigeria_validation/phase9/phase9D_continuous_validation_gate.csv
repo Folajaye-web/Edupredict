@@ -1,0 +1,20 @@
+gate,status,detail
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9A_production_prediction_service.json
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9B_operational_control_gate.json
+required_artifact,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9C_production_monitoring_gate.json
+session_health,PASS,expected=['2025/2026']; actual=['2025/2026']
+feature_health,PASS,missing=[]; forbidden_used=[]
+data_quality,PASS,missing_cells=4409; structural_missing=4409; unexpected_missing=0; duplicate_rows=0; invalid_attendance=0; invalid_numeric_cells=0
+classification_model_identity,PASS,expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_model_identity,PASS,expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+prediction_execution_health,PASS,"rows=51,840; classification_predictions=51,840; regression_predictions=51,840"
+early_warning_health,PASS,threshold=0.4; flags=7126; rate=0.13746141975308643
+prediction_output_range,PASS,risk=0.00012133634954624333-0.9988739267049508; exam_score=6.074694178551834-59.247904895706334
+prediction_reproducibility,PASS,classification_error=0.0; regression_error=0.0
+phase9A_health,PASS,status=PASS
+phase9B_health,PASS,status=PASS
+phase9C_health,PASS,status=PASS
+continuous_validation_contract,PASS,all production health controls passed

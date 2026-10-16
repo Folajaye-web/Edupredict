@@ -1,0 +1,194 @@
+{
+  "project": "EduPredict",
+  "phase": "7C",
+  "gate": "Production Release Gate",
+  "status": "PRODUCTION_RELEASE_READY",
+  "release_ready": true,
+  "test_session": "2025/2026",
+  "threshold": 0.4,
+  "model_artifacts": {
+    "classification": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib",
+    "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib",
+    "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+  },
+  "datasets": {
+    "training": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\train_2023_2024.csv",
+    "validation": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\validation_2024_2025.csv",
+    "final_test": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv",
+    "training_rows": 52830,
+    "validation_rows": 52260,
+    "final_test_rows": 51840
+  },
+  "gates": [
+    {
+      "gate": "artifact_exists",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\train_2023_2024.csv"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\validation_2024_2025.csv"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "phase5_classification_hgb.joblib",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "phase5_regression_hgb.joblib",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "phase7A_artifact_gate.json",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7A_artifact_gate.json"
+    },
+    {
+      "gate": "artifact_exists",
+      "item": "phase7B_subgroup_safety_gate.json",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase7B_subgroup_safety_gate.json"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "52,830 rows"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "expected=2023/2024; actual=['2023/2024']"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "train_2023_2024.csv",
+      "status": "PASS",
+      "detail": "production feature contract valid"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "52,260 rows"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "expected=2024/2025; actual=['2024/2025']"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "validation_2024_2025.csv",
+      "status": "PASS",
+      "detail": "production feature contract valid"
+    },
+    {
+      "gate": "dataset_load",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "51,840 rows"
+    },
+    {
+      "gate": "session_integrity",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "expected=2025/2026; actual=['2025/2026']"
+    },
+    {
+      "gate": "feature_contract",
+      "item": "test_2025_2026.csv",
+      "status": "PASS",
+      "detail": "production feature contract valid"
+    },
+    {
+      "gate": "model_loadability",
+      "item": "classification",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "gate": "model_loadability",
+      "item": "regression",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "gate": "classification_prediction",
+      "item": "2025/2026 final test",
+      "status": "PASS",
+      "detail": "51,840 predictions"
+    },
+    {
+      "gate": "regression_prediction",
+      "item": "2025/2026 final test",
+      "status": "PASS",
+      "detail": "51,840 predictions"
+    },
+    {
+      "gate": "reproducibility",
+      "item": "classification predictions",
+      "status": "PASS",
+      "detail": "max_absolute_difference=0"
+    },
+    {
+      "gate": "phase7A",
+      "item": "artifact_and_contract_gate",
+      "status": "PASS",
+      "detail": "PASS"
+    },
+    {
+      "gate": "phase7B",
+      "item": "subgroup_safety_gate",
+      "status": "PASS",
+      "detail": "PASS"
+    },
+    {
+      "gate": "threshold_policy",
+      "item": "classification threshold",
+      "status": "PASS",
+      "detail": "selected_threshold=0.40"
+    },
+    {
+      "gate": "production_contract",
+      "item": "Phase 7 contract",
+      "status": "PASS",
+      "detail": "feature contract, forbidden predictors and threshold agree"
+    },
+    {
+      "gate": "environment_record",
+      "item": "runtime dependencies",
+      "status": "PASS",
+      "detail": "{\"python\": \"3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]\", \"python_executable\": \"C:\\\\Users\\\\l2e\\\\OneDrive\\\\Desktop\\\\.venv\\\\Scripts\\\\python.exe\", \"numpy\": \"2.5.3\", \"pandas\": \"3.0.6\", \"scikit_learn\": \"1.9.0\", \"joblib\": \"1.6.0\"}"
+    }
+  ],
+  "phase7A_status": "PASS",
+  "phase7B_status": "PASS",
+  "reproducibility_error": 0.0,
+  "environment": {
+    "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+    "python_executable": "C:\\Users\\l2e\\OneDrive\\Desktop\\.venv\\Scripts\\python.exe",
+    "numpy": "2.5.3",
+    "pandas": "3.0.6",
+    "scikit_learn": "1.9.0",
+    "joblib": "1.6.0"
+  },
+  "warnings": [],
+  "failures": []
+}

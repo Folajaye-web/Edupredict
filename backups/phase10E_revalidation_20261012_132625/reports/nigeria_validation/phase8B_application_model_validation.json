@@ -1,0 +1,171 @@
+{
+  "project": "EduPredict",
+  "phase": "8B",
+  "gate": "Application / Model Integration Validation",
+  "status": "PASS",
+  "production_threshold": 0.4,
+  "final_test_rows": 51840,
+  "classification_probability_range": [
+    0.00012133634954624333,
+    0.9988739267049508
+  ],
+  "regression_prediction_range": [
+    6.074694178551834,
+    59.247904895706334
+  ],
+  "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+  "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e",
+  "checks": [
+    {
+      "check": "required_artifact",
+      "item": "application",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\app\\streamlit_app.py"
+    },
+    {
+      "check": "required_artifact",
+      "item": "source",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\src"
+    },
+    {
+      "check": "required_artifact",
+      "item": "package",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\src\\edupredict"
+    },
+    {
+      "check": "required_artifact",
+      "item": "classification_model",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib"
+    },
+    {
+      "check": "required_artifact",
+      "item": "regression_model",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib"
+    },
+    {
+      "check": "required_artifact",
+      "item": "final_test_dataset",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+    },
+    {
+      "check": "feature_contract",
+      "item": "final_test_dataset",
+      "status": "PASS",
+      "detail": "missing=[]; forbidden_used=[]"
+    },
+    {
+      "check": "session_contract",
+      "item": "final_test_dataset",
+      "status": "PASS",
+      "detail": "expected=['2025/2026']; actual=['2025/2026']"
+    },
+    {
+      "check": "model_load",
+      "item": "classification",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "check": "model_load",
+      "item": "regression",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "check": "prediction_input_contract",
+      "item": "production_features",
+      "status": "PASS",
+      "detail": "columns=19; rows=51840"
+    },
+    {
+      "check": "classification_prediction",
+      "item": "predict_proba",
+      "status": "PASS",
+      "detail": "rows=51840; range=0.0001-0.9989"
+    },
+    {
+      "check": "threshold_contract",
+      "item": "classification",
+      "status": "PASS",
+      "detail": "expected=0.40; actual=0.40; flagged=7126"
+    },
+    {
+      "check": "regression_prediction",
+      "item": "predict",
+      "status": "PASS",
+      "detail": "rows=51840; range=6.07-59.25"
+    },
+    {
+      "check": "package_import",
+      "item": "edupredict",
+      "status": "PASS",
+      "detail": "edupredict imported from None"
+    },
+    {
+      "check": "application_marker",
+      "item": "streamlit",
+      "status": "PASS",
+      "detail": "found=True"
+    },
+    {
+      "check": "application_marker",
+      "item": "edupredict",
+      "status": "PASS",
+      "detail": "found=True"
+    },
+    {
+      "check": "application_marker",
+      "item": "model",
+      "status": "PASS",
+      "detail": "found=True"
+    },
+    {
+      "check": "model_hash",
+      "item": "classification",
+      "status": "PASS",
+      "detail": "expected=None; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+    },
+    {
+      "check": "model_hash",
+      "item": "regression",
+      "status": "PASS",
+      "detail": "expected=None; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+    },
+    {
+      "check": "reproducibility",
+      "item": "production_predictions",
+      "status": "PASS",
+      "detail": "classification_error=0.0; regression_error=0.0"
+    },
+    {
+      "check": "prior_gate",
+      "item": "phase7A",
+      "status": "PASS",
+      "detail": "status=PASS"
+    },
+    {
+      "check": "prior_gate",
+      "item": "phase7B",
+      "status": "PASS",
+      "detail": "status=PASS"
+    },
+    {
+      "check": "prior_gate",
+      "item": "phase7C",
+      "status": "PASS",
+      "detail": "status=PRODUCTION_RELEASE_READY"
+    },
+    {
+      "check": "prior_gate",
+      "item": "phase7_contract",
+      "status": "PASS",
+      "detail": "status=CONDITIONAL_REVIEW"
+    }
+  ],
+  "failures": []
+}

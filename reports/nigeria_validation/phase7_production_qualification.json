@@ -1,0 +1,52 @@
+{
+  "phase": 7,
+  "status": "CONDITIONAL_REVIEW",
+  "rows": {
+    "train": 52830,
+    "validation": 52260,
+    "development": 105090,
+    "final_test": 51840
+  },
+  "selected_threshold": 0.39999999999999997,
+  "validation_calibration": {
+    "mean_absolute_calibration_error": 0.010123269991700327,
+    "maximum_calibration_error": 0.052443759648760746,
+    "bins": 10
+  },
+  "phase6_holdout_max_calibration_error": 0.11236208587140084,
+  "final_test_classification": {
+    "roc_auc": 0.9559722900044815,
+    "pr_auc": 0.7869679434390142,
+    "precision": 0.6718684099536061,
+    "recall": 0.7269546699117736,
+    "f1": 0.698326879520713,
+    "accuracy": 0.9203510802469136,
+    "brier": 0.05489807298062667,
+    "log_loss": 0.18126496971475836,
+    "threshold": 0.39999999999999997,
+    "tn": 42932,
+    "fp": 2334,
+    "fn": 1795,
+    "tp": 4779,
+    "flagged": 7113,
+    "prevalence": 0.12681327160493827
+  },
+  "final_test_regression": {
+    "mae": 5.17755044147938,
+    "rmse": 6.47483714316934,
+    "r2": 0.6099395097545866
+  },
+  "gates": {
+    "artifact_integrity": true,
+    "session_integrity": true,
+    "feature_contract": true,
+    "reproducibility": true,
+    "calibration_review_required": true,
+    "phase6_holdout_max_calibration_error": 0.11236208587140084
+  },
+  "model_hashes": {
+    "classification_model": "45e9ee24a7492260fac3762de126610b422f3261c44e90386dff4411028bda12",
+    "regression_model": "7a2cffc98c5b024de723a432c3e0d78782d4fb83f46ab66f5466e9485b8eb5ae"
+  },
+  "subgroups": 43
+}

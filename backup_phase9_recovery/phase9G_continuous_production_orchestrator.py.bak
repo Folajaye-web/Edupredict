@@ -1,0 +1,518 @@
+﻿from __future__ import annotations
+
+import csv
+import json
+import os
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+SRC_DIR = PROJECT_ROOT / "src"
+
+REPORT_DIR = (
+PROJECT_ROOT
+/ "reports"
+/ "nigeria_validation"
+/ "phase9"
+)
+
+SCRIPT_DIR = (
+PROJECT_ROOT
+/ "scripts"
+/ "nigeria_validation"
+)
+
+STAGES = [
+(
+"phase9A",
+SCRIPT_DIR
+/ "phase9A_production_prediction_service.py",
+),
+(
+"phase9B",
+SCRIPT_DIR
+/ "phase9B_operational_control_gate.py",
+),
+(
+"phase9C",
+SCRIPT_DIR
+/ "phase9C_production_monitoring_gate.py",
+),
+(
+"phase9D",
+SCRIPT_DIR
+/ "phase9D_continuous_validation_gate.py",
+),
+(
+"phase9E",
+SCRIPT_DIR
+/ "phase9E_production_monitoring_dashboard.py",
+),
+]
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+def stage_report_candidates(stage_name: str) -> list[Path]:
+    return [
+REPORT_DIR
+/ f"{stage_name}_production_prediction_service.json",
+REPORT_DIR
+/ f"{stage_name}_operational_control_gate.json",
+REPORT_DIR
+/ f"{stage_name}_production_monitoring_gate.json",
+REPORT_DIR
+/ f"{stage_name}_continuous_validation_gate.json",
+REPORT_DIR
+/ f"{stage_name}_continuous_validation_summary.json",
+REPORT_DIR
+/ f"{stage_name}_production_health_summary.json",
+]
+
+def find_stage_report(stage_name: str) -> Path | None:
+    for path in stage_report_candidates(stage_name):
+        if path.exists():
+            return path
+    return None
+
+def read_stage_status(
+stage_name: str,
+) -> tuple[str, str | None]:
+    report = find_stage_report(stage_name)
+    if report is None:
+        return "MISSING", None
+
+try:
+    payload = json.loads(
+        report.read_text(encoding="utf-8")
+    )
+
+    status = str(
+        payload.get("status", "UNKNOWN")
+    )
+
+    return status, str(report)
+
+except Exception:
+    return "UNREADABLE", str(report)
+
+def build_environment() -> dict[str, str]:
+    env = os.environ.copy()
+
+existing_pythonpath = env.get(
+    "PYTHONPATH",
+    "",
+)
+
+src_value = str(SRC_DIR)
+
+if existing_pythonpath:
+    paths = existing_pythonpath.split(os.pathsep)
+
+    if src_value not in paths:
+        env["PYTHONPATH"] = (
+            src_value
+            + os.pathsep
+            + existing_pythonpath
+        )
+else:
+    env["PYTHONPATH"] = src_value
+
+env["PYTHONUTF8"] = "1"
+
+return env
+
+def run_stage(
+stage_name: str,
+script_path: Path,
+) -> dict:
+    started = utc_now()
+
+result = {
+    "stage": stage_name,
+    "script": str(script_path),
+    "started_utc": started,
+    "completed_utc": None,
+    "return_code": None,
+    "status": "NOT_RUN",
+    "report": None,
+    "stdout": "",
+    "stderr": "",
+    "report_status": None,
+}
+
+if not script_path.exists():
+
+    result["status"] = "MISSING_SCRIPT"
+    result["completed_utc"] = utc_now()
+
+    result["stderr"] = (
+        f"Required script does not exist: "
+        f"{script_path}"
+    )
+    
+return result
+
+try:
+
+    env = build_environment()
+
+    completed = subprocess.run(
+        [
+            sys.executable,
+            str(script_path),
+        ],
+        cwd=str(PROJECT_ROOT),
+        env=env,
+        capture_output=True,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=1800,
+        check=False,
+    )
+
+    result["return_code"] = completed.returncode
+
+    result["stdout"] = (
+        completed.stdout[-12000:]
+        if completed.stdout
+        else ""
+    )
+
+    result["stderr"] = (
+        completed.stderr[-12000:]
+        if completed.stderr
+        else ""
+    )
+
+    result["completed_utc"] = utc_now()
+
+    report_status, report_path = (
+        read_stage_status(stage_name)
+    )
+
+    result["report"] = report_path
+    result["report_status"] = report_status
+
+    if (
+        completed.returncode == 0
+        and report_status == "PASS"
+    ):
+        result["status"] = "PASS"
+
+    elif (
+        completed.returncode == 0
+        and report_status
+        in {
+            "PRODUCTION_RELEASE_READY",
+            "HEALTH_REVIEW_REQUIRED",
+        }
+    ):
+        result["status"] = report_status
+
+    else:
+        result["status"] = "FAIL"
+
+except subprocess.TimeoutExpired as exc:
+
+    result["completed_utc"] = utc_now()
+    result["status"] = "TIMEOUT"
+    result["stderr"] = str(exc)
+
+except Exception as exc:
+
+    result["completed_utc"] = utc_now()
+    result["status"] = "ERROR"
+    result["stderr"] = repr(exc)
+
+return result
+
+def write_json(
+path: Path,
+payload: dict,
+) -> None:
+    path.write_text(
+    json.dumps(
+        payload,
+        indent=2,
+        default=str,
+    ),
+    encoding="utf-8",
+)
+
+
+def write_csv(
+path: Path,
+stages: list[dict],
+) -> None:
+    fields = [
+    "stage",
+    "status",
+    "return_code",
+    "script",
+    "report",
+    "started_utc",
+    "completed_utc",
+    "report_status",
+]
+
+with path.open(
+    "w",
+    newline="",
+    encoding="utf-8",
+) as f:
+
+    writer = csv.DictWriter(
+        f,
+        fieldnames=fields,
+    )
+
+    writer.writeheader()
+
+    for item in stages:
+
+        writer.writerow(
+            {
+                key: item.get(key, "")
+                for key in fields
+            }
+        )
+
+
+def print_stage_output(
+stage_name: str,
+result: dict,
+) -> None:
+    
+    print(
+    f"{stage_name}: "
+    f"{result['status']} "
+    f"(return_code="
+    f"{result.get('return_code')})"
+)
+
+stdout = result.get("stdout") or ""
+
+if stdout:
+    print(stdout)
+
+stderr = result.get("stderr") or ""
+
+if stderr:
+    print("STDERR:")
+    print(stderr)
+
+
+def main() -> int:
+    REPORT_DIR.mkdir(
+    parents=True,
+    exist_ok=True,
+)
+
+print("=" * 72)
+print(
+    "EDUPREDICT NIGERIA VALIDATION — PHASE 9G"
+)
+print("=" * 72)
+print(
+    "Purpose: Continuous Scheduled Validation / "
+    "Production Run Orchestrator"
+)
+print()
+print(
+    f"Project root: {PROJECT_ROOT}"
+)
+print(
+    f"Python:       {sys.executable}"
+)
+print(
+    f"Source path:  {SRC_DIR}"
+)
+print()
+
+if not SRC_DIR.exists():
+
+    print(
+        "ERROR: Required src directory does not exist."
+    )
+    print(
+        f"Missing: {SRC_DIR}"
+    )
+
+    return 1
+
+stages = []
+failures = []
+
+for stage_name, script_path in STAGES:
+
+    print("-" * 72)
+    print(
+        f"Running {stage_name}..."
+    )
+    print(
+        f"Script: {script_path}"
+    )
+
+    result = run_stage(
+        stage_name,
+        script_path,
+    )
+
+    stages.append(result)
+
+    print_stage_output(
+        stage_name,
+        result,
+    )
+
+    if result["status"] != "PASS":
+
+        failures.append(
+            {
+                "stage": stage_name,
+                "status": result["status"],
+                "return_code": result.get(
+                    "return_code"
+                ),
+                "report": result.get(
+                    "report"
+                ),
+            }
+        )
+
+        print()
+        print(
+            f"Stopping Phase 9G after "
+            f"{stage_name}."
+        )
+
+        break
+
+passed = (
+    len(stages) == len(STAGES)
+    and not failures
+    and all(
+        item["status"] == "PASS"
+        for item in stages
+    )
+)
+
+status = (
+    "PASS"
+    if passed
+    else "HEALTH_REVIEW_REQUIRED"
+)
+
+audit_record = {
+    "project": "EduPredict",
+    "phase": "9G",
+    "status": status,
+    "timestamp_utc": utc_now(),
+    "purpose": (
+        "Continuous scheduled production "
+        "validation and orchestration "
+        "without automatic model replacement "
+        "or retraining."
+    ),
+    "project_root": str(
+        PROJECT_ROOT
+    ),
+    "python_executable": sys.executable,
+    "source_path": str(SRC_DIR),
+    "stages_expected": [
+        name
+        for name, _ in STAGES
+    ],
+    "stages_executed": [
+        item["stage"]
+        for item in stages
+    ],
+    "stages": stages,
+    "failures": failures,
+    "operational_policy": {
+        "automatic_model_replacement": False,
+        "automatic_retraining": False,
+        "stop_on_failed_gate": True,
+        "human_review_on_failure": True,
+        "production_model_identity_locked": True,
+    },
+}
+
+json_path = (
+    REPORT_DIR
+    / "phase9G_continuous_production_orchestrator.json"
+)
+
+csv_path = (
+    REPORT_DIR
+    / "phase9G_continuous_production_orchestrator.csv"
+)
+
+write_json(
+    json_path,
+    audit_record,
+)
+
+write_csv(
+    csv_path,
+    stages,
+)
+
+print()
+print("=" * 72)
+print(
+    "PHASE 9G CONTINUOUS PRODUCTION ORCHESTRATOR"
+)
+print("=" * 72)
+
+print(
+    f"Stages expected:    {len(STAGES)}"
+)
+
+print(
+    f"Stages executed:    {len(stages)}"
+)
+
+print(f"Stages expected:    {len(STAGES)}")
+print(f"Stages executed:    {len(stages)}")
+
+stages_passed = sum(
+    1
+    for item in stages
+    if item.get("status") == "PASS"
+)
+
+print(f"Stages passed:      {stages_passed}")
+print(f"Stages failed:      {len(failures)}")
+
+print()
+print(f"PHASE 9G STATUS: {status}")
+print()
+
+print(
+    f"PHASE 9G STATUS: {status}"
+)
+
+print()
+print(
+    f"Report: {json_path}"
+)
+
+print(
+    f"Checks: {csv_path}"
+)
+
+print("=" * 72)
+
+return 0 if passed else 1
+
+
+if name == main:
+    raise SystemExit
+(main())
+
+

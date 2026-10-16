@@ -1,0 +1,26 @@
+check,item,status,detail
+required_artifact,application,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\app\streamlit_app.py
+required_artifact,source,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\src
+required_artifact,package,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\src\edupredict
+required_artifact,classification_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+required_artifact,regression_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+required_artifact,final_test_dataset,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+feature_contract,final_test_dataset,PASS,missing=[]; forbidden_used=[]
+session_contract,final_test_dataset,PASS,expected=['2025/2026']; actual=['2025/2026']
+model_load,classification,PASS,Pipeline
+model_load,regression,PASS,Pipeline
+prediction_input_contract,production_features,PASS,columns=19; rows=51840
+classification_prediction,predict_proba,PASS,rows=51840; range=0.0001-0.9989
+threshold_contract,classification,PASS,expected=0.40; actual=0.40; flagged=7126
+regression_prediction,predict,PASS,rows=51840; range=6.07-59.25
+package_import,edupredict,PASS,edupredict imported from None
+application_marker,streamlit,PASS,found=True
+application_marker,edupredict,PASS,found=True
+application_marker,model,PASS,found=True
+model_hash,classification,PASS,expected=None; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+model_hash,regression,PASS,expected=None; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+reproducibility,production_predictions,PASS,classification_error=0.0; regression_error=0.0
+prior_gate,phase7A,PASS,status=PASS
+prior_gate,phase7B,PASS,status=PASS
+prior_gate,phase7C,PASS,status=PRODUCTION_RELEASE_READY
+prior_gate,phase7_contract,PASS,status=CONDITIONAL_REVIEW

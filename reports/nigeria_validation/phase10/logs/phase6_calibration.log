@@ -1,0 +1,32 @@
+STDOUT
+========================================================================
+EDUPREDICT NIGERIA VALIDATION — PHASE 6
+========================================================================
+Purpose: frozen Phase 5 model stability, calibration and error analysis
+Final holdout: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+Holdout rows: 51,840
+
+OVERALL FROZEN MODEL RESULTS
+Regression MAE:  5.1776
+Regression RMSE: 6.4748
+Regression R2:   0.6099
+
+ROC-AUC: 0.9560
+PR-AUC:  0.7870
+Precision: 0.7139
+Recall: 0.6862
+F1: 0.6998
+Brier: 0.0549
+
+Calibration mean absolute bin error: 0.0245
+Calibration maximum bin error: 0.1124
+
+Calibration report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase6_calibration.csv
+Threshold report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase6_thresholds.csv
+Prediction evidence: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase6_holdout_predictions.csv
+Phase 6 report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase6_stability_calibration.json
+
+PHASE 6 STATUS: DIAGNOSTIC_COMPLETE
+No production release decision is made by Phase 6.
+
+STDERR

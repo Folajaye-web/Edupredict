@@ -1,0 +1,20 @@
+check,status,detail
+final_test_dataset,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+classification_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+regression_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+phase9A_report,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9A_production_prediction_service.json
+phase9A_status,PASS,PASS
+classification_hash,PASS,expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_hash,PASS,expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+phase9A_classification_hash,PASS,phase9A=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+phase9A_regression_hash,PASS,phase9A=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+threshold_contract,PASS,expected=0.4; actual=0.4
+input_rows,PASS,dataset=51840; phase9A=51840
+feature_contract,PASS,missing=[]; forbidden_used=[]
+production_session,PASS,expected=['2025/2026']; actual=['2025/2026']
+classification_model_load,PASS,Pipeline
+regression_model_load,PASS,Pipeline
+prediction_contract,PASS,rows=51840
+prediction_ranges,PASS,risk=0.0001-0.9989; score=6.0747-59.2479
+phase9A_reproducibility,PASS,risk_min_error=0; risk_max_error=0; score_min_error=0; score_max_error=0
+early_warning_contract,PASS,expected=7126; actual=7126

@@ -1,0 +1,24 @@
+﻿check,status,detail
+project_root_exists,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL
+classification_model_exists,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+classification_model_hash,PASS,expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_model_exists,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+regression_model_hash,PASS,expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+phase9G_report_exists_and_readable,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase9\phase9G_continuous_production_orchestrator.json
+phase9G_overall_status,PASS,status=PASS
+phase9G_expected_stages_executed,PASS,"expected=['phase9A', 'phase9B', 'phase9C', 'phase9D', 'phase9E']; actual=['phase9A', 'phase9B', 'phase9C', 'phase9D', 'phase9E']"
+phase9G_individual_stage_results,PASS,"phase9A: status=PASS, report_status=PASS, return_code=0; phase9B: status=PASS, report_status=PASS, return_code=0; phase9C: status=PASS, report_status=PASS, return_code=0; phase9D: status=PASS, report_status=PASS, return_code=0; phase9E: status=PASS, report_status=PASS, return_code=0"
+automatic_model_replacement_disabled,PASS,False
+automatic_retraining_disabled,PASS,False
+stop_on_failed_gate_enabled,PASS,True
+human_review_on_failure_enabled,PASS,True
+production_model_identity_locked,PASS,True
+phase10A_report_exists_and_readable,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase10\phase10A_failure_injection_recovery.json
+phase10A_overall_status,PASS,PASS
+phase10A_all_tests_passed,PASS,passed=9; failed=0
+phase10A_production_database_unchanged,PASS,False
+phase10A_production_models_unchanged,PASS,False
+scheduled_task_found,PASS,EduPredict-Phase9G-ContinuousValidation
+scheduled_task_enabled,PASS,Ready
+scheduled_task_action_matches_project,PASS,"[{""Execute"": ""C:\\Users\\l2e\\OneDrive\\Desktop\\.venv\\Scripts\\python.exe"", ""Arguments"": ""\""C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9G_continuous_production_orchestrator.py\"""", ""WorkingDirectory"": ""C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL""}]"
+scheduled_task_last_run_success,PASS,last_result=0; last_run=2026-10-10T18:15:03.0000000+01:00

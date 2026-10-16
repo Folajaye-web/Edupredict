@@ -1,0 +1,63 @@
+{
+  "project": "EduPredict",
+  "phase": "10A",
+  "status": "PASS",
+  "timestamp_utc": "2026-10-10T18:19:08.852718+00:00",
+  "purpose": "Isolated failure-injection and recovery validation",
+  "production_database_modified": false,
+  "production_models_modified": false,
+  "tests": [
+    {
+      "test": "Pre-flight prerequisites",
+      "status": "PASS",
+      "detail": "Project, Python, orchestrator and both model files must exist"
+    },
+    {
+      "test": "Actual Phase 9G module loads",
+      "status": "PASS",
+      "detail": "Imported run_stage() from the project orchestrator"
+    },
+    {
+      "test": "Nonzero exit rejected",
+      "status": "PASS",
+      "detail": "status=FAIL; return_code=7"
+    },
+    {
+      "test": "Downstream stage stopped",
+      "status": "PASS",
+      "detail": "executed=['injected_failure']; marker_exists=False"
+    },
+    {
+      "test": "Timeout handled",
+      "status": "PASS",
+      "detail": "status=TIMEOUT"
+    },
+    {
+      "test": "Missing report detected",
+      "status": "PASS",
+      "detail": "status=MISSING"
+    },
+    {
+      "test": "Corrupt report rejected",
+      "status": "PASS",
+      "detail": "status=UNREADABLE"
+    },
+    {
+      "test": "Recovery rerun succeeds",
+      "status": "PASS",
+      "detail": "status=PASS; return_code=0"
+    },
+    {
+      "test": "Production model hashes unchanged",
+      "status": "PASS",
+      "detail": "Both approved model files retain their original SHA-256 hashes"
+    }
+  ],
+  "tests_passed": 9,
+  "tests_failed": 0,
+  "production_model_hashes_before": {
+    "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+  },
+  "orchestrator": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9G_continuous_production_orchestrator.py"
+}

@@ -1,0 +1,15 @@
+STDOUT
+========================================================================
+EDUPREDICT — CORRECTED LEAKAGE-SAFE FEATURE BUILDER
+========================================================================
+Input rows: 156,930
+Output rows: 156,930
+Schools: 12; school/student pairs: 2,304
+Subject temporal violations: 0
+Overall temporal violations: 0
+Same-term outcomes used in history: False
+Feature file: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\leakage_safe_features.csv
+Report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\feature_build_report.json
+PHASE 2 FEATURE BUILD: PASS
+
+STDERR

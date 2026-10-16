@@ -1,0 +1,28 @@
+check,status,detail
+project_root,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL
+data_directory,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits
+model_directory,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation
+report_directory,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation
+source_directory,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\src
+phase7A_gate,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7A_artifact_gate.json
+phase7B_gate,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7B_subgroup_safety_gate.json
+phase7C_gate,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7C_production_release_gate.json
+phase7_contract,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7_production_contract.json
+phase7A_status,PASS,PASS
+phase7B_status,PASS,PASS
+phase7C_status,PASS,PRODUCTION_RELEASE_READY
+classification_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+regression_model,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+final_test_dataset,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+final_test_load,PASS,"51,840 rows"
+production_feature_contract,PASS,missing=[]; forbidden_used=[]
+production_session,PASS,['2025/2026']
+classification_model_load,PASS,Pipeline
+regression_model_load,PASS,Pipeline
+classification_production_smoke,PASS,"51,840 predictions; range=0.0001-0.9989"
+regression_production_smoke,PASS,"51,840 predictions; range=6.07-59.25"
+classification_hash_contract,PASS,expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a
+regression_hash_contract,PASS,expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e
+streamlit_application_present,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\app\streamlit_app.py
+application_integration_markers,PASS,"found=['streamlit', 'edupredict', 'model']"
+edupredict_package_present,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\src\edupredict

@@ -1,0 +1,165 @@
+﻿import csv
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(r"C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL")
+REPORTS = ROOT / "reports" / "nigeria_validation"
+PHASE9 = REPORTS / "phase9"
+PHASE10 = REPORTS / "phase10"
+MODELS = ROOT / "models" / "nigeria_validation"
+
+EXPECTED_MODELS = {
+    "classification": (
+        MODELS / "phase5_classification_hgb.joblib",
+        "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    ),
+    "regression": (
+        MODELS / "phase5_regression_hgb.joblib",
+        "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e",
+    ),
+}
+
+# These controls require documented evidence or authorised human approval.
+REQUIRED_CONTROLS = [
+    ("pilot_scope_approved", "Written pilot scope and participating-school approval"),
+    ("data_processing_authorised", "Documented lawful basis, privacy notice and data-processing responsibilities"),
+    ("data_access_reviewed", "Approved user roles, least-privilege access and access-review procedure"),
+    ("retention_and_deletion_defined", "Documented retention, deletion and backup arrangements"),
+    ("human_review_procedure_approved", "Named staff responsible for reviewing and challenging warnings"),
+    ("consequential_decision_safeguard", "Written prohibition on using predictions alone for promotion, punishment or exclusion"),
+    ("fairness_evaluation_approved", "Evaluation plan for relevant groups with suitable sample-size and uncertainty checks"),
+    ("real_world_metrics_defined", "Pre-agreed accuracy, calibration, false-positive and false-negative monitoring measures"),
+    ("intervention_workflow_defined", "Documented support actions, responsible staff and follow-up recording"),
+    ("incident_and_appeal_process_approved", "Documented correction, complaint, appeal and incident-response process"),
+    ("rollback_and_shutdown_tested", "Tested procedure to suspend pilot predictions and return to normal school processes"),
+    ("staff_training_completed", "Evidence that pilot staff understand limitations and responsible use"),
+    ("pilot_success_criteria_approved", "Written acceptance thresholds, review date and named approval authority"),
+]
+
+def sha256(path):
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+def read_json(path):
+    try:
+        with path.open("r", encoding="utf-8") as handle:
+            data = json.load(handle)
+        return data if isinstance(data, dict) else None
+    except Exception:
+        return None
+
+def main():
+    PHASE10.mkdir(parents=True, exist_ok=True)
+    checks = []
+    blockers = []
+
+    def add_check(name, status, detail):
+        checks.append({"check": name, "status": status, "detail": str(detail)})
+        if status != "PASS":
+            blockers.append(name)
+
+    # Technical prerequisites already established in prior phases.
+    add_check("project_root", "PASS" if ROOT.is_dir() else "FAIL", ROOT)
+
+    for name, (path, expected_hash) in EXPECTED_MODELS.items():
+        exists = path.is_file()
+        add_check(f"{name}_model_exists",
+                  "PASS" if exists else "FAIL", path)
+        if exists:
+            actual_hash = sha256(path)
+            add_check(f"{name}_model_identity",
+                      "PASS" if actual_hash == expected_hash else "FAIL",
+                      f"expected={expected_hash}; actual={actual_hash}")
+
+    phase9g_path = PHASE9 / "phase9G_continuous_production_orchestrator.json"
+    phase9g = read_json(phase9g_path)
+    add_check("phase9G_evidence",
+              "PASS" if phase9g and phase9g.get("status") == "PASS" else "FAIL",
+              phase9g_path)
+
+    phase10b_path = PHASE10 / "phase10B_production_readiness_audit.json"
+    phase10b = read_json(phase10b_path)
+    add_check("phase10B_evidence",
+              "PASS" if phase10b and phase10b.get("status") == "PASS"
+              and phase10b.get("checks_failed") == 0 else "FAIL",
+              phase10b_path)
+
+    # Do not invent approvals: initialise every governance control as unverified.
+    checklist = []
+    for control, evidence_required in REQUIRED_CONTROLS:
+        checklist.append({
+            "control": control,
+            "status": "NOT_VERIFIED",
+            "evidence_required": evidence_required,
+            "evidence_reference": "",
+            "reviewer": "",
+            "review_date": "",
+            "notes": "",
+        })
+        blockers.append(control)
+
+    checklist_path = PHASE10 / "phase10C_pilot_governance_checklist.csv"
+    with checklist_path.open("w", newline="", encoding="utf-8-sig") as handle:
+        writer = csv.DictWriter(handle, fieldnames=list(checklist[0].keys()))
+        writer.writeheader()
+        writer.writerows(checklist)
+
+    # The pilot is blocked until all required controls have been evidenced
+    # and reviewed. This initial run cannot approve a pilot by itself.
+    technical_failures = [c for c in checks if c["status"] != "PASS"]
+    report = {
+        "project": "EduPredict",
+        "phase": "10C",
+        "status": "FAIL" if technical_failures else "BLOCKED",
+        "pilot_authorised": False,
+        "timestamp_utc": datetime.now(timezone.utc).isoformat(),
+        "purpose": "Controlled pilot readiness; technical prerequisites and governance evidence inventory",
+        "production_database_modified": False,
+        "production_models_modified": False,
+        "automatic_retraining_performed": False,
+        "scheduled_task_triggered": False,
+        "technical_checks_passed": sum(c["status"] == "PASS" for c in checks),
+        "technical_checks_failed": len(technical_failures),
+        "governance_controls_total": len(checklist),
+        "governance_controls_verified": 0,
+        "governance_controls_unverified": len(checklist),
+        "blockers": blockers,
+        "technical_checks": checks,
+        "governance_checklist_csv": str(checklist_path),
+        "limitations": [
+            "This initial inventory does not constitute pilot approval.",
+            "NOT_VERIFIED controls must be supported by real evidence and reviewed by an authorised person.",
+            "Do not enter student names, student IDs or other personal data into the governance checklist.",
+            "Model predictions must remain advisory and must not independently determine consequential student outcomes."
+        ],
+    }
+
+    report_path = PHASE10 / "phase10C_controlled_pilot_readiness.json"
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+    print("=" * 68)
+    print("EDUPREDICT PHASE 10C — CONTROLLED PILOT READINESS")
+    print("=" * 68)
+    for item in checks:
+        print(f"{item['status']:4}  {item['check']}: {item['detail']}")
+    print()
+    print(f"Technical checks passed: {report['technical_checks_passed']}")
+    print(f"Technical checks failed: {report['technical_checks_failed']}")
+    print(f"Governance controls awaiting evidence: {len(checklist)}")
+    print(f"Overall status: {report['status']}")
+    print("Pilot authorised: False")
+    print(f"JSON report: {report_path}")
+    print(f"Governance checklist: {checklist_path}")
+    print("=" * 68)
+
+    # BLOCKED is an expected result until governance evidence is reviewed.
+    return 1 if technical_failures else 0
+
+if __name__ == "__main__":
+    sys.exit(main())

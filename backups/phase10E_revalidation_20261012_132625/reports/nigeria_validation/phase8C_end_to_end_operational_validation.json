@@ -1,0 +1,175 @@
+{
+  "project": "EduPredict",
+  "phase": "8C",
+  "gate": "End-to-End Operational Validation",
+  "status": "PASS",
+  "final_test_rows": 51840,
+  "production_threshold": 0.4,
+  "risk_flags": 7126,
+  "classification_probability_range": [
+    0.00012133634954624333,
+    0.9988739267049508
+  ],
+  "predicted_exam_score_range": [
+    6.074694178551834,
+    59.247904895706334
+  ],
+  "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+  "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e",
+  "previous_gates": {
+    "phase7A": "PASS",
+    "phase7B": "PASS",
+    "phase7C": "PASS",
+    "phase8A": "PASS",
+    "phase8B": "PASS"
+  },
+  "checks": [
+    {
+      "check": "application_present",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\app\\streamlit_app.py"
+    },
+    {
+      "check": "source_package",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\src\\edupredict"
+    },
+    {
+      "check": "final_test_dataset",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+    },
+    {
+      "check": "final_test_load",
+      "status": "PASS",
+      "detail": "51,840 rows"
+    },
+    {
+      "check": "production_session",
+      "status": "PASS",
+      "detail": "expected=['2025/2026']; actual=['2025/2026']"
+    },
+    {
+      "check": "production_feature_contract",
+      "status": "PASS",
+      "detail": "missing=[]; forbidden_used=[]"
+    },
+    {
+      "check": "classification_model_artifact",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib"
+    },
+    {
+      "check": "regression_model_artifact",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib"
+    },
+    {
+      "check": "classification_model_load",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "check": "regression_model_load",
+      "status": "PASS",
+      "detail": "Pipeline"
+    },
+    {
+      "check": "classification_prediction",
+      "status": "PASS",
+      "detail": "51,840 predictions; range=0.0001-0.9989"
+    },
+    {
+      "check": "regression_prediction",
+      "status": "PASS",
+      "detail": "51,840 predictions; range=6.07-59.25"
+    },
+    {
+      "check": "early_warning_threshold",
+      "status": "PASS",
+      "detail": "threshold=0.40; flagged=7126; population=51,840"
+    },
+    {
+      "check": "prediction_output_contract",
+      "status": "PASS",
+      "detail": "rows=51,840; columns=['risk_probability', 'early_warning', 'predicted_exam_score']"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "streamlit: found=True"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "edupredict: found=True"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "model: found=True"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "Dashboard: found=True"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "Students: found=True"
+    },
+    {
+      "check": "application_source_marker",
+      "status": "PASS",
+      "detail": "Attendance: found=True"
+    },
+    {
+      "check": "streamlit_app_test",
+      "status": "PASS",
+      "detail": "application executed successfully; exceptions=0; dataframes=0; buttons=0; selectboxes=1"
+    },
+    {
+      "check": "prediction_reproducibility",
+      "status": "PASS",
+      "detail": "classification_error=0.0; regression_error=0.0"
+    },
+    {
+      "check": "classification_hash",
+      "status": "PASS",
+      "detail": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+    },
+    {
+      "check": "regression_hash",
+      "status": "PASS",
+      "detail": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+    },
+    {
+      "check": "previous_gate",
+      "status": "PASS",
+      "detail": "phase7A: status=PASS"
+    },
+    {
+      "check": "previous_gate",
+      "status": "PASS",
+      "detail": "phase7B: status=PASS"
+    },
+    {
+      "check": "previous_gate",
+      "status": "PASS",
+      "detail": "phase7C: status=PRODUCTION_RELEASE_READY"
+    },
+    {
+      "check": "previous_gate",
+      "status": "PASS",
+      "detail": "phase8A: status=PASS"
+    },
+    {
+      "check": "previous_gate",
+      "status": "PASS",
+      "detail": "phase8B: status=PASS"
+    }
+  ],
+  "failures": [],
+  "reviews": []
+}

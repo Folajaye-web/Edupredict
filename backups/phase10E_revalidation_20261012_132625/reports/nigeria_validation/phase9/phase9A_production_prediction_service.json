@@ -1,0 +1,25 @@
+{
+  "project": "EduPredict",
+  "phase": "9A",
+  "status": "PASS",
+  "input_rows": 51840,
+  "prediction_rows": 51840,
+  "prediction_columns": [
+    "risk_probability",
+    "early_warning",
+    "predicted_exam_score"
+  ],
+  "metadata": {
+    "model_version": "phase5_nigeria_production",
+    "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e",
+    "threshold": 0.4,
+    "rows": 51840,
+    "early_warning_count": 7126,
+    "early_warning_rate": 0.13746141975308643,
+    "risk_probability_min": 0.00012133634954624333,
+    "risk_probability_max": 0.9988739267049508,
+    "predicted_exam_score_min": 6.074694178551834,
+    "predicted_exam_score_max": 59.247904895706334
+  }
+}

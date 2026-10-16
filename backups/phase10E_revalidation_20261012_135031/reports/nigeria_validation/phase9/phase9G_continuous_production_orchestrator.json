@@ -1,0 +1,94 @@
+{
+  "project": "EduPredict",
+  "phase": "9G",
+  "status": "PASS",
+  "timestamp_utc": "2026-10-10T17:16:07.029247+00:00",
+  "purpose": "Continuous scheduled production validation and orchestration without automatic model replacement or retraining.",
+  "project_root": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL",
+  "python_executable": "C:\\Users\\l2e\\OneDrive\\Desktop\\.venv\\Scripts\\python.exe",
+  "source_path": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\src",
+  "stages_expected": [
+    "phase9A",
+    "phase9B",
+    "phase9C",
+    "phase9D",
+    "phase9E"
+  ],
+  "stages_executed": [
+    "phase9A",
+    "phase9B",
+    "phase9C",
+    "phase9D",
+    "phase9E"
+  ],
+  "stages": [
+    {
+      "stage": "phase9A",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9A_production_prediction_service.py",
+      "started_utc": "2026-10-10T17:15:03.966545+00:00",
+      "completed_utc": "2026-10-10T17:15:14.090319+00:00",
+      "return_code": 0,
+      "status": "PASS",
+      "report": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9A_production_prediction_service.json",
+      "stdout": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 9A\n========================================================================\nPurpose: Production Prediction Service Gate\n\n========================================================================\nPHASE 9A RESULT\n========================================================================\nInput rows:             51,840\nPrediction rows:        51,840\nEarly-warning flags:    7,126\nEarly-warning rate:     13.7461%\nRisk probability range: 0.0001 - 0.9989\nExam-score range:       6.07 - 59.25\n\nProduction artifact verification: PASS\nFeature contract:                 PASS\nPrediction contract:              PASS\nPrediction range validation:      PASS\n\nPHASE 9A STATUS: PASS\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9A_production_prediction_service.json\n========================================================================\n",
+      "stderr": "",
+      "report_status": "PASS"
+    },
+    {
+      "stage": "phase9B",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9B_operational_control_gate.py",
+      "started_utc": "2026-10-10T17:15:14.092585+00:00",
+      "completed_utc": "2026-10-10T17:15:38.467151+00:00",
+      "return_code": 0,
+      "status": "PASS",
+      "report": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9B_operational_control_gate.json",
+      "stdout": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 9B\n========================================================================\nPurpose: Operational Control / Audit Gate\n\n\n========================================================================\nPHASE 9B RESULT\n========================================================================\nfinal_test_dataset                 PASS    C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv\nclassification_model               PASS    C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib\nregression_model                   PASS    C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib\nphase9A_report                     PASS    C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9A_production_prediction_service.json\nphase9A_status                     PASS    PASS\nclassification_hash                PASS    expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a\nregression_hash                    PASS    expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e\nphase9A_classification_hash        PASS    phase9A=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a\nphase9A_regression_hash            PASS    phase9A=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e\nthreshold_contract                 PASS    expected=0.4; actual=0.4\ninput_rows                         PASS    dataset=51840; phase9A=51840\nfeature_contract                   PASS    missing=[]; forbidden_used=[]\nproduction_session                 PASS    expected=['2025/2026']; actual=['2025/2026']\nclassification_model_load          PASS    Pipeline\nregression_model_load              PASS    Pipeline\nprediction_contract                PASS    rows=51840\nprediction_ranges                  PASS    risk=0.0001-0.9989; score=6.0747-59.2479\nphase9A_reproducibility            PASS    risk_min_error=0; risk_max_error=0; score_min_error=0; score_max_error=0\nearly_warning_contract             PASS    expected=7126; actual=7126\n\nPHASE 9B STATUS: PASS\n\nReport:  C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9B_operational_control_gate.json\nChecks:  C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9B_operational_control_gate.csv\nAudit:   C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9B_production_audit_record.json\n========================================================================\n",
+      "stderr": "",
+      "report_status": "PASS"
+    },
+    {
+      "stage": "phase9C",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9C_production_monitoring_gate.py",
+      "started_utc": "2026-10-10T17:15:38.468566+00:00",
+      "completed_utc": "2026-10-10T17:15:48.108001+00:00",
+      "return_code": 0,
+      "status": "PASS",
+      "report": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9C_production_monitoring_gate.json",
+      "stdout": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 9C\n========================================================================\nPurpose: Production Monitoring / Drift Gate\n\nMonitoring rows: 51,840\n\n========================================================================\nPHASE 9C PRODUCTION MONITORING GATE\n========================================================================\nMonitoring rows:             51,840\nEarly-warning flags:         7,126\nEarly-warning rate:          13.7461%\nRisk probability:            0.0001 - 0.9989\nPredicted exam score:        6.07 - 59.25\n\nModel hash integrity:        PASS\nPrediction integrity:        PASS\nDistribution baseline:       PASS\nPhase 9B control:            PASS\n\nPHASE 9C STATUS: PASS\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9C_production_monitoring_gate.json\nChecks: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9C_production_monitoring_gate.csv\n========================================================================\n",
+      "stderr": "",
+      "report_status": "PASS"
+    },
+    {
+      "stage": "phase9D",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9D_continuous_validation_gate.py",
+      "started_utc": "2026-10-10T17:15:48.109346+00:00",
+      "completed_utc": "2026-10-10T17:16:04.426598+00:00",
+      "return_code": 0,
+      "status": "PASS",
+      "report": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9D_continuous_validation_gate.json",
+      "stdout": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 9D\n========================================================================\nPurpose: Continuous Validation / Production Health Gate\n\nHealth-check rows: 51,840\n\n\n========================================================================\nPHASE 9D CONTINUOUS VALIDATION / HEALTH GATE\n========================================================================\nProduction rows:             51,840\nSession:                     ['2025/2026']\nEarly-warning flags:         7126\nEarly-warning rate:          13.7461%\n\nData quality:                PASS\nModel identity:              PASS\nPrediction execution:        PASS\nReproducibility:             PASS\nPrevious phases:             PASS\nContinuous contract:         PASS\n\nPHASE 9D STATUS: PASS\n\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9D_continuous_validation_gate.json\nChecks: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9D_continuous_validation_gate.csv\n========================================================================\n",
+      "stderr": "",
+      "report_status": "PASS"
+    },
+    {
+      "stage": "phase9E",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase9E_production_monitoring_dashboard.py",
+      "started_utc": "2026-10-10T17:16:04.429429+00:00",
+      "completed_utc": "2026-10-10T17:16:07.027971+00:00",
+      "return_code": 0,
+      "status": "PASS",
+      "report": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9E_production_monitoring_dashboard.json",
+      "stdout": "========================================================================\nEDUPREDICT NIGERIA VALIDATION \u2014 PHASE 9E\n========================================================================\nPurpose: Production Monitoring Dashboard / Operational Health Gate\n\n\n========================================================================\nPHASE 9E PRODUCTION MONITORING DASHBOARD\n========================================================================\nPhase 9D contract:       PASS\nModel identity:          PASS\nData quality policy:     PASS\nProduction rows:         51,840\nEarly-warning flags:    7,126\nEarly-warning rate:     13.7461%\nRisk probability:       0.0001 - 0.9989\nPredicted exam score:   6.07 - 59.25\n\nPHASE 9E STATUS: PASS\n\nDashboard: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9E_production_monitoring_dashboard.json\nChecks:    C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9E_production_monitoring_dashboard.csv\n========================================================================\n",
+      "stderr": "",
+      "report_status": "PASS"
+    }
+  ],
+  "failures": [],
+  "operational_policy": {
+    "automatic_model_replacement": false,
+    "automatic_retraining": false,
+    "stop_on_failed_gate": true,
+    "human_review_on_failure": true,
+    "production_model_identity_locked": true
+  }
+}

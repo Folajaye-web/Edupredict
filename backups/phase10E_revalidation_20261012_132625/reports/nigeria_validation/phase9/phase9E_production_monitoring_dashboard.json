@@ -1,0 +1,125 @@
+{
+  "project": "EduPredict",
+  "phase": "9E",
+  "status": "PASS",
+  "timestamp_utc": "2026-10-10T17:16:06.804202+00:00",
+  "purpose": "Production monitoring snapshot built on the passing Phase 9D continuous-validation contract.",
+  "source_contract": {
+    "phase9A": "PASS",
+    "phase9B": "PASS",
+    "phase9C": "PASS",
+    "phase9D": "PASS"
+  },
+  "health_snapshot": {
+    "rows": 51840,
+    "session": [
+      "2025/2026"
+    ],
+    "warning_threshold": 0.4,
+    "early_warning_count": 7126,
+    "early_warning_rate": 0.13746141975308643,
+    "risk_probability_min": 0.00012133634954624333,
+    "risk_probability_max": 0.9988739267049508,
+    "risk_probability_mean": 0.13093419993097055,
+    "predicted_exam_score_min": 6.074694178551834,
+    "predicted_exam_score_max": 59.247904895706334,
+    "predicted_exam_score_mean": 36.39353305405675
+  },
+  "data_quality": {
+    "structural_missing_cells": 4409,
+    "unexpected_missing_cells": 0,
+    "non_historical_missing_cells": 0,
+    "duplicate_rows": 0,
+    "invalid_attendance": 0,
+    "invalid_numeric_cells": 0
+  },
+  "model": {
+    "version": "phase5_nigeria_production",
+    "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e",
+    "threshold": 0.4
+  },
+  "controls": {
+    "phase9D_health_contract": true,
+    "classification_model_identity": true,
+    "regression_model_identity": true,
+    "production_metric_ranges": true,
+    "data_quality_policy": true,
+    "session_health": true
+  },
+  "operational_policy": {
+    "automatic_model_replacement": false,
+    "automatic_retraining": false,
+    "human_review_on_failure": true,
+    "production_model_identity_locked": true
+  },
+  "failures": [],
+  "checks": [
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "phase9A_report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9A_production_prediction_service.json"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "phase9B_report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9B_operational_control_gate.json"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "phase9C_report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9C_production_monitoring_gate.json"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "phase9D_report: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9D_continuous_validation_gate.json"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "classification_model: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "regression_model: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib"
+    },
+    {
+      "gate": "required_artifact",
+      "status": "PASS",
+      "detail": "production_dataset: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+    },
+    {
+      "gate": "session_health",
+      "status": "PASS",
+      "detail": "expected=['2025/2026']; actual=['2025/2026']"
+    },
+    {
+      "gate": "phase9D_health_contract",
+      "status": "PASS",
+      "detail": "status=PASS; continuous_validation_contract=True"
+    },
+    {
+      "gate": "classification_model_identity",
+      "status": "PASS",
+      "detail": "expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+    },
+    {
+      "gate": "regression_model_identity",
+      "status": "PASS",
+      "detail": "expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+    },
+    {
+      "gate": "production_metric_ranges",
+      "status": "PASS",
+      "detail": "rows=51840; warning_rate=0.137461; risk=0.000121-0.998874; exam_score=6.07-59.25"
+    },
+    {
+      "gate": "data_quality_policy",
+      "status": "PASS",
+      "detail": "structural_missing=4409; unexpected_missing=0; non_historical_missing=0; duplicates=0; invalid_attendance=0; invalid_numeric=0"
+    }
+  ],
+  "next_action": "Continue production monitoring; investigate manually if any future Phase 9D control fails. Do not automatically retrain or replace the frozen production model."
+}

@@ -1,0 +1,109 @@
+{
+  "phase": 5,
+  "status": "PASS",
+  "protocol": {
+    "selection_regression": "lowest validation MAE",
+    "selection_classification": "highest validation PR-AUC",
+    "development_sessions": [
+      "2023/2024",
+      "2024/2025"
+    ],
+    "final_holdout_session": "2025/2026",
+    "holdout_used_for_selection": false,
+    "holdout_used_for_training": false,
+    "classification_threshold": 0.5
+  },
+  "rows": {
+    "train": 52830,
+    "validation": 52260,
+    "development": 105090,
+    "final_test": 51840
+  },
+  "predictors": [
+    "School",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count"
+  ],
+  "forbidden_predictors": [
+    "Exam",
+    "Final_Year_Result",
+    "Grade",
+    "Intervention",
+    "Promotion_Status",
+    "Total"
+  ],
+  "validation_metrics": {
+    "regression": {
+      "mae": 3.6532061070020103,
+      "rmse": 4.620156165451033,
+      "r2": 0.7682964104021754
+    },
+    "classification": {
+      "roc_auc": 0.9767546434070525,
+      "pr_auc": 0.9213632809432627,
+      "precision": 0.8474820143884892,
+      "recall": 0.8144358407079646,
+      "f1": 0.8306303765336341,
+      "accuracy": 0.9310562571756602,
+      "brier": 0.048975307843280844,
+      "threshold": 0.5,
+      "confusion_matrix": {
+        "tn": 39822,
+        "fp": 1590,
+        "fn": 2013,
+        "tp": 8835
+      },
+      "positive_prevalence": 0.20757749712973594
+    }
+  },
+  "final_test_metrics": {
+    "regression": {
+      "mae": 5.181607701709818,
+      "rmse": 6.479975352507585,
+      "r2": 0.6093201867827935
+    },
+    "classification": {
+      "roc_auc": 0.9560145074100805,
+      "pr_auc": 0.7861198536775633,
+      "precision": 0.7125928266708801,
+      "recall": 0.686035898996045,
+      "f1": 0.6990622335890878,
+      "accuracy": 0.925096450617284,
+      "brier": 0.05488789371818192,
+      "threshold": 0.5,
+      "confusion_matrix": {
+        "tn": 43447,
+        "fp": 1819,
+        "fn": 2064,
+        "tp": 4510
+      },
+      "positive_prevalence": 0.12681327160493827
+    }
+  },
+  "generalization_delta_test_minus_validation": {
+    "regression_mae": 1.5284015947078076,
+    "regression_rmse": 1.8598191870565524,
+    "regression_r2": -0.1589762236193819,
+    "classification_roc_auc": -0.020740135996971998,
+    "classification_pr_auc": -0.13524342726569938,
+    "classification_f1": -0.13156814294454633,
+    "classification_brier": 0.005912585874901073
+  },
+  "note": "Phase 5 is final chronological holdout measurement only. Production release still requires calibration, subgroup/stability, provenance review and release gate."
+}

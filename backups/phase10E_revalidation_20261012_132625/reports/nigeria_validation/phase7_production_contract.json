@@ -1,0 +1,92 @@
+{
+  "project": "EduPredict",
+  "phase": 7,
+  "status": "CONDITIONAL_REVIEW",
+  "model_family": {
+    "classification": "HistGradientBoostingClassifier",
+    "regression": "HistGradientBoostingRegressor"
+  },
+  "training_sessions": [
+    "2023/2024",
+    "2024/2025"
+  ],
+  "final_test_session": "2025/2026",
+  "classification_target": "target_below_credit",
+  "regression_target": "target_exam_score",
+  "features": [
+    "School",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count"
+  ],
+  "forbidden_predictors": [
+    "Exam",
+    "Final_Year_Result",
+    "Grade",
+    "Intervention",
+    "Promotion_Status",
+    "Total"
+  ],
+  "threshold_policy": {
+    "selection_dataset": "2024/2025 validation",
+    "selected_threshold": 0.39999999999999997
+  },
+  "final_test": {
+    "classification": {
+      "roc_auc": 0.9560145074100805,
+      "pr_auc": 0.7861198536775633,
+      "precision": 0.6713443727196183,
+      "recall": 0.7277152418618801,
+      "f1": 0.6983941605839417,
+      "accuracy": 0.9202932098765432,
+      "brier": 0.05488789371818192,
+      "log_loss": 0.1811350006522371,
+      "threshold": 0.39999999999999997,
+      "tn": 42924,
+      "fp": 2342,
+      "fn": 1790,
+      "tp": 4784,
+      "flagged": 7126,
+      "prevalence": 0.12681327160493827
+    },
+    "regression": {
+      "mae": 5.181607701709818,
+      "rmse": 6.479975352507585,
+      "r2": 0.6093201867827935
+    }
+  },
+  "validation_calibration": {
+    "mean_absolute_calibration_error": 0.0050088912701762855,
+    "maximum_calibration_error": 0.0162189593685631,
+    "bins": 10
+  },
+  "gates": {
+    "artifact_integrity": true,
+    "session_integrity": true,
+    "feature_contract": true,
+    "reproducibility": true,
+    "calibration_review_required": false
+  },
+  "artifacts": {
+    "classification_model": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib",
+    "regression_model": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib",
+    "classification_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression_sha256": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+  },
+  "important_note": "Phase 7 is a qualification/release-gate assessment. Production deployment requires resolution of any CONDITIONAL_REVIEW items before the model is designated production-ready."
+}

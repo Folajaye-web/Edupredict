@@ -1,0 +1,50 @@
+{
+  "phase": 7,
+  "status": "CONDITIONAL_REVIEW",
+  "rows": {
+    "train": 52830,
+    "validation": 52260,
+    "development": 105090,
+    "final_test": 51840
+  },
+  "selected_threshold": 0.39999999999999997,
+  "validation_calibration": {
+    "mean_absolute_calibration_error": 0.0050088912701762855,
+    "maximum_calibration_error": 0.0162189593685631,
+    "bins": 10
+  },
+  "final_test_classification": {
+    "roc_auc": 0.9560145074100805,
+    "pr_auc": 0.7861198536775633,
+    "precision": 0.6713443727196183,
+    "recall": 0.7277152418618801,
+    "f1": 0.6983941605839417,
+    "accuracy": 0.9202932098765432,
+    "brier": 0.05488789371818192,
+    "log_loss": 0.1811350006522371,
+    "threshold": 0.39999999999999997,
+    "tn": 42924,
+    "fp": 2342,
+    "fn": 1790,
+    "tp": 4784,
+    "flagged": 7126,
+    "prevalence": 0.12681327160493827
+  },
+  "final_test_regression": {
+    "mae": 5.181607701709818,
+    "rmse": 6.479975352507585,
+    "r2": 0.6093201867827935
+  },
+  "gates": {
+    "artifact_integrity": true,
+    "session_integrity": true,
+    "feature_contract": true,
+    "reproducibility": true,
+    "calibration_review_required": false
+  },
+  "model_hashes": {
+    "classification_model": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a",
+    "regression_model": "f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+  },
+  "subgroups": 43
+}

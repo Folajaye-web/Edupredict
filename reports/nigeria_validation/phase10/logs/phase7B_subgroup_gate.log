@@ -1,0 +1,51 @@
+STDOUT
+========================================================================
+EDUPREDICT NIGERIA VALIDATION — PHASE 7B
+========================================================================
+Purpose: Subgroup Safety / Stability Gate
+
+Checking final-test dataset...
+PASS: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+
+Checking frozen classification model...
+PASS: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+
+Final-test rows: 51,840
+Session integrity: PASS
+Feature contract: PASS
+Classification model: LOADED
+Classification interface: PASS
+
+Checking School subgroups...
+
+Checking Class subgroups...
+
+Checking Arm subgroups...
+
+Checking Term subgroups...
+
+Checking Subject subgroups...
+
+========================================================================
+PHASE 7B RESULT
+========================================================================
+Global ROC-AUC:  0.9560
+Global PR-AUC:   0.7870
+Global F1:       0.6983
+Global recall:   0.7270
+Global precision: 0.6719
+
+Subgroups checked: 43
+PASS:             43
+FAIL:             0
+REVIEW:           0
+
+
+PHASE 7B STATUS: PASS
+
+Detailed results: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7B_subgroup_safety_gate.csv
+Dimension summary: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7B_dimension_summary.csv
+Contract:         C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7B_subgroup_safety_gate.json
+========================================================================
+
+STDERR

@@ -1,0 +1,671 @@
+from pathlib import Path
+import json
+import hashlib
+import warnings
+
+import joblib
+import numpy as np
+import pandas as pd
+
+from sklearn.metrics import (
+    roc_auc_score,
+    average_precision_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    accuracy_score,
+    brier_score_loss,
+    log_loss,
+    confusion_matrix,
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+)
+from sklearn.calibration import calibration_curve
+from sklearn.base import clone
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.impute import SimpleImputer
+
+warnings.filterwarnings("ignore")
+
+# ============================================================
+# EDUPREDICT PHASE 7
+# PRODUCTION QUALIFICATION / RELEASE GATE
+# ============================================================
+
+ROOT = Path(__file__).resolve().parents[2]
+
+DATA_DIR = ROOT / "data" / "nigeria_validation" / "splits"
+MODEL_DIR = ROOT / "models" / "nigeria_validation"
+REPORT_DIR = ROOT / "reports" / "nigeria_validation"
+PHASE6_REPORT = REPORT_DIR / "phase6_stability_calibration.json"
+
+REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+TRAIN = DATA_DIR / "train_2023_2024.csv"
+VALID = DATA_DIR / "validation_2024_2025.csv"
+TEST = DATA_DIR / "test_2025_2026.csv"
+
+CLS_MODEL = MODEL_DIR / "phase5_classification_hgb.joblib"
+REG_MODEL = MODEL_DIR / "phase5_regression_hgb.joblib"
+
+CAT = [
+    "School",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+]
+
+NUM = [
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count",
+]
+
+FEATURES = CAT + NUM
+
+TARGET_CLS = "target_below_credit"
+TARGET_REG = "target_exam_score"
+
+FORBIDDEN = {
+    "Exam",
+    "Total",
+    "Grade",
+    "Final_Year_Result",
+    "Promotion_Status",
+    "Intervention",
+}
+
+# Candidate policy thresholds.
+THRESHOLDS = np.arange(0.20, 0.71, 0.05)
+
+# We deliberately use a development-side calibration/selection
+# protocol and keep 2025/26 untouched for final measurement.
+CALIBRATION_BINS = 10
+
+
+# ============================================================
+# UTILITIES
+# ============================================================
+
+
+def sha256_file(path: Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as f:
+        for chunk in iter(lambda: f.read(1024 * 1024), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def load_csv(path: Path) -> pd.DataFrame:
+    if not path.exists():
+        raise FileNotFoundError(path)
+
+    df = pd.read_csv(path)
+
+    required = set(FEATURES + [TARGET_CLS, TARGET_REG])
+
+    missing = sorted(required - set(df.columns))
+
+    if missing:
+        raise RuntimeError(f"{path.name}: missing required columns: {missing}")
+
+    return df
+
+
+def check_forbidden(df: pd.DataFrame, name: str):
+    present = sorted(FORBIDDEN.intersection(df.columns))
+
+    # Forbidden columns may physically exist in the dataset because
+    # they are outcomes/history fields. The important requirement is
+    # that they are NOT part of the model feature contract.
+    used = sorted(set(FEATURES).intersection(FORBIDDEN))
+
+    if used:
+        raise RuntimeError(f"{name}: forbidden predictors entered feature list: {used}")
+
+    return present
+
+
+def X(df):
+    return df[FEATURES]
+
+
+def classification_metrics(y, p, threshold=0.5):
+    pred = (p >= threshold).astype(int)
+
+    tn, fp, fn, tp = confusion_matrix(y, pred, labels=[0, 1]).ravel()
+
+    return {
+        "roc_auc": float(roc_auc_score(y, p)),
+        "pr_auc": float(average_precision_score(y, p)),
+        "precision": float(precision_score(y, pred, zero_division=0)),
+        "recall": float(recall_score(y, pred, zero_division=0)),
+        "f1": float(f1_score(y, pred, zero_division=0)),
+        "accuracy": float(accuracy_score(y, pred)),
+        "brier": float(brier_score_loss(y, p)),
+        "log_loss": float(log_loss(y, p, labels=[0, 1])),
+        "threshold": float(threshold),
+        "tn": int(tn),
+        "fp": int(fp),
+        "fn": int(fn),
+        "tp": int(tp),
+        "flagged": int(pred.sum()),
+        "prevalence": float(np.mean(y)),
+    }
+
+
+def calibration_metrics(y, p):
+    prob_true, prob_pred = calibration_curve(
+        y,
+        p,
+        n_bins=CALIBRATION_BINS,
+        strategy="quantile",
+    )
+
+    errors = np.abs(prob_pred - prob_true)
+
+    return {
+        "mean_absolute_calibration_error": float(np.mean(errors)),
+        "maximum_calibration_error": float(np.max(errors)),
+        "bins": int(len(errors)),
+    }
+
+
+def threshold_table(y, p):
+    rows = []
+
+    for threshold in THRESHOLDS:
+        m = classification_metrics(y, p, threshold=float(threshold))
+
+        rows.append(
+            {
+                "threshold": float(threshold),
+                "precision": m["precision"],
+                "recall": m["recall"],
+                "f1": m["f1"],
+                "accuracy": m["accuracy"],
+                "flagged": m["flagged"],
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+
+def build_classifier():
+    pre = ColumnTransformer(
+        [
+            (
+                "num",
+                Pipeline([("imp", SimpleImputer(strategy="median"))]),
+                NUM,
+            ),
+            (
+                "cat",
+                Pipeline(
+                    [
+                        ("imp", SimpleImputer(strategy="most_frequent")),
+                        (
+                            "ord",
+                            OrdinalEncoder(
+                                handle_unknown="use_encoded_value",
+                                unknown_value=-1,
+                            ),
+                        ),
+                    ]
+                ),
+                CAT,
+            ),
+        ]
+    )
+
+    return Pipeline(
+        [
+            ("pre", pre),
+            (
+                "model",
+                HistGradientBoostingClassifier(
+                    max_iter=300,
+                    learning_rate=0.05,
+                    max_leaf_nodes=31,
+                    l2_regularization=1.0,
+                    random_state=42,
+                ),
+            ),
+        ]
+    )
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+
+def main():
+
+    print("=" * 72)
+    print("EDUPREDICT NIGERIA VALIDATION — PHASE 7")
+    print("=" * 72)
+    print("Purpose: Production Qualification / Release Gate")
+    print()
+
+    # --------------------------------------------------------
+    # 1. ARTIFACT EXISTENCE
+    # --------------------------------------------------------
+
+    artifact_gate = True
+
+    for path in [CLS_MODEL, REG_MODEL]:
+        if not path.exists():
+            artifact_gate = False
+            print(f"ERROR: missing model artifact: {path}")
+
+    if not artifact_gate:
+        raise RuntimeError("PHASE 7 STOPPED: required Phase 5 model artifact missing.")
+
+    # --------------------------------------------------------
+    # 2. LOAD DATA
+    # --------------------------------------------------------
+
+    train = load_csv(TRAIN)
+    valid = load_csv(VALID)
+    test = load_csv(TEST)
+
+    development = pd.concat([train, valid], ignore_index=True)
+
+    print(f"Training rows:       {len(train):,}")
+    print(f"Validation rows:     {len(valid):,}")
+    print(f"Development rows:    {len(development):,}")
+    print(f"Final test rows:     {len(test):,}")
+    print()
+
+    # --------------------------------------------------------
+    # 3. SESSION INTEGRITY
+    # --------------------------------------------------------
+
+    expected_sessions = {
+        TRAIN: "2023/2024",
+        VALID: "2024/2025",
+        TEST: "2025/2026",
+    }
+
+    session_gate = True
+
+    for path, df in [
+        (TRAIN, train),
+        (VALID, valid),
+        (TEST, test),
+    ]:
+        values = sorted(df["Academic_Session"].astype(str).unique())
+
+        expected = expected_sessions[path]
+
+        if values != [expected]:
+            session_gate = False
+
+            print(f"SESSION ERROR: {path.name}: {values} != {[expected]}")
+
+    # --------------------------------------------------------
+    # 4. FEATURE CONTRACT
+    # --------------------------------------------------------
+
+    feature_gate = True
+
+    for name, df in [
+        ("train", train),
+        ("validation", valid),
+        ("test", test),
+    ]:
+        forbidden_present = check_forbidden(df, name)
+
+        if forbidden_present:
+            print(
+                f"{name}: forbidden outcome columns present "
+                f"but excluded from predictors: "
+                f"{forbidden_present}"
+            )
+
+    if set(FEATURES) & FORBIDDEN:
+        feature_gate = False
+
+    # --------------------------------------------------------
+    # 5. LOAD FROZEN PHASE 5 CLASSIFIER
+    # --------------------------------------------------------
+
+    print()
+    print("Loading frozen Phase 5 models...")
+
+    frozen_cls = joblib.load(CLS_MODEL)
+    frozen_reg = joblib.load(REG_MODEL)
+
+    print("Classification model: LOADED")
+    print("Regression model:     LOADED")
+
+    # --------------------------------------------------------
+    # 6. VERIFY FROZEN MODEL ON FINAL TEST
+    # --------------------------------------------------------
+
+    y_test_cls = test[TARGET_CLS].astype(int).to_numpy()
+    y_test_reg = test[TARGET_REG].astype(float).to_numpy()
+
+    p_test_raw = frozen_cls.predict_proba(X(test))[:, 1]
+
+    pred_test_reg = frozen_reg.predict(X(test))
+
+    raw_test_cls = classification_metrics(y_test_cls, p_test_raw, threshold=0.5)
+
+    raw_test_reg = {
+        "mae": float(mean_absolute_error(y_test_reg, pred_test_reg)),
+        "rmse": float(np.sqrt(mean_squared_error(y_test_reg, pred_test_reg))),
+        "r2": float(r2_score(y_test_reg, pred_test_reg)),
+    }
+
+    # --------------------------------------------------------
+    # 7. DEVELOPMENT-SIDE THRESHOLD POLICY
+    # --------------------------------------------------------
+    #
+    # We use validation data for policy selection.
+    # The final test remains untouched until the policy is frozen.
+    #
+
+    y_valid = valid[TARGET_CLS].astype(int).to_numpy()
+
+    p_valid = frozen_cls.predict_proba(X(valid))[:, 1]
+
+    threshold_df = threshold_table(y_valid, p_valid)
+
+    # Select maximum validation F1.
+    # Tie-breaker: higher recall.
+    threshold_df = threshold_df.sort_values(["f1", "recall"], ascending=[False, False])
+
+    selected_threshold = float(threshold_df.iloc[0]["threshold"])
+
+    threshold_df = threshold_df.sort_values("threshold")
+
+    threshold_df.to_csv(REPORT_DIR / "phase7_threshold_policy.csv", index=False)
+
+    # --------------------------------------------------------
+    # 8. DEVELOPMENT CALIBRATION DIAGNOSTICS
+    # --------------------------------------------------------
+
+    valid_calibration = calibration_metrics(y_valid, p_valid)
+
+    # We deliberately do NOT calibrate using 2025/26.
+    #
+    # The production candidate is therefore based on the
+    # development/validation evidence only.
+    #
+    # The raw frozen classifier remains the official Phase 5
+    # benchmark.
+
+    # --------------------------------------------------------
+    # 9. APPLY FROZEN POLICY TO FINAL TEST
+    # --------------------------------------------------------
+
+    final_policy_metrics = classification_metrics(
+        y_test_cls, p_test_raw, threshold=selected_threshold
+    )
+
+    # --------------------------------------------------------
+    # 10. SUBGROUP STABILITY
+    # --------------------------------------------------------
+
+    subgroup_results = []
+
+    subgroup_columns = [
+        "School",
+        "Class",
+        "Arm",
+        "Term",
+        "Subject",
+    ]
+
+    for column in subgroup_columns:
+        for value, group in test.groupby(column, dropna=False):
+            if len(group) < 100:
+                continue
+
+            yy = group[TARGET_CLS].astype(int).to_numpy()
+
+            pp = frozen_cls.predict_proba(X(group))[:, 1]
+
+            try:
+                m = classification_metrics(yy, pp, threshold=selected_threshold)
+            except Exception:
+                continue
+
+            subgroup_results.append(
+                {
+                    "dimension": column,
+                    "group": str(value),
+                    "rows": int(len(group)),
+                    "roc_auc": m["roc_auc"],
+                    "pr_auc": m["pr_auc"],
+                    "precision": m["precision"],
+                    "recall": m["recall"],
+                    "f1": m["f1"],
+                    "brier": m["brier"],
+                    "threshold": selected_threshold,
+                }
+            )
+
+    subgroup_df = pd.DataFrame(subgroup_results)
+
+    subgroup_df.to_csv(REPORT_DIR / "phase7_subgroup_gate.csv", index=False)
+
+    # --------------------------------------------------------
+    # 11. MODEL HASHES
+    # --------------------------------------------------------
+
+    hashes = {
+        "classification_model": sha256_file(CLS_MODEL),
+        "regression_model": sha256_file(REG_MODEL),
+    }
+
+    # --------------------------------------------------------
+    # 12. REPRODUCIBILITY CHECK
+    # --------------------------------------------------------
+
+    p_test_repeat = frozen_cls.predict_proba(X(test))[:, 1]
+
+    reproducibility_error = float(np.max(np.abs(p_test_raw - p_test_repeat)))
+
+    reproducibility_gate = reproducibility_error == 0.0
+
+    # --------------------------------------------------------
+    # 13. RELEASE GATE
+    # --------------------------------------------------------
+
+    # Critical structural requirements. The frozen Phase 6 holdout is used
+    # only as a diagnostic trigger for review, never for threshold/model tuning.
+    phase6_report = {}
+    if PHASE6_REPORT.is_file():
+        try:
+            phase6_report = json.loads(PHASE6_REPORT.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            phase6_report = {}
+    phase6_max_calibration_error = (
+        phase6_report.get("calibration", {}).get("max_absolute_bin_error")
+    )
+    if phase6_report.get("status") != "DIAGNOSTIC_COMPLETE" or phase6_max_calibration_error is None:
+        calibration_review_required = True
+    else:
+        calibration_review_required = (
+            float(phase6_max_calibration_error) > 0.10
+            or valid_calibration["maximum_calibration_error"] > 0.10
+        )
+
+    structural_pass = artifact_gate and session_gate and feature_gate and reproducibility_gate
+    release_status = (
+        "NOT_QUALIFIED" if not structural_pass
+        else "CONDITIONAL_REVIEW" if calibration_review_required
+        else "TECHNICAL_QUALIFICATION_PASS"
+    )
+
+    # --------------------------------------------------------
+    # 14. PRODUCTION CONTRACT
+    # --------------------------------------------------------
+
+    contract = {
+        "project": "EduPredict",
+        "phase": 7,
+        "status": release_status,
+        "model_family": {
+            "classification": "HistGradientBoostingClassifier",
+            "regression": "HistGradientBoostingRegressor",
+        },
+        "training_sessions": [
+            "2023/2024",
+            "2024/2025",
+        ],
+        "final_test_session": "2025/2026",
+        "classification_target": TARGET_CLS,
+        "regression_target": TARGET_REG,
+        "features": FEATURES,
+        "forbidden_predictors": sorted(FORBIDDEN),
+        "threshold_policy": {
+            "selection_dataset": "2024/2025 validation",
+            "selected_threshold": selected_threshold,
+        },
+        "final_test": {
+            "classification": final_policy_metrics,
+            "regression": raw_test_reg,
+        },
+        "validation_calibration": valid_calibration,
+        "phase6_holdout_max_calibration_error": phase6_max_calibration_error,
+        "gates": {
+            "artifact_integrity": artifact_gate,
+            "session_integrity": session_gate,
+            "feature_contract": feature_gate,
+            "reproducibility": reproducibility_gate,
+            "calibration_review_required": calibration_review_required,
+            "phase6_holdout_max_calibration_error": phase6_max_calibration_error,
+        },
+        "artifacts": {
+            "classification_model": str(CLS_MODEL),
+            "regression_model": str(REG_MODEL),
+            "classification_sha256": hashes["classification_model"],
+            "regression_sha256": hashes["regression_model"],
+        },
+        "important_note": (
+            "Phase 7 is a qualification/release-gate "
+            "assessment. Production deployment requires "
+            "resolution of any CONDITIONAL_REVIEW items "
+            "before the model is designated production-ready."
+        ),
+    }
+
+    contract_path = REPORT_DIR / "phase7_production_contract.json"
+
+    contract_path.write_text(json.dumps(contract, indent=2), encoding="utf-8")
+
+    # --------------------------------------------------------
+    # 15. COMPLETE REPORT
+    # --------------------------------------------------------
+
+    report = {
+        "phase": 7,
+        "status": release_status,
+        "rows": {
+            "train": len(train),
+            "validation": len(valid),
+            "development": len(development),
+            "final_test": len(test),
+        },
+        "selected_threshold": selected_threshold,
+        "validation_calibration": valid_calibration,
+        "phase6_holdout_max_calibration_error": phase6_max_calibration_error,
+        "final_test_classification": final_policy_metrics,
+        "final_test_regression": raw_test_reg,
+        "gates": contract["gates"],
+        "model_hashes": hashes,
+        "subgroups": len(subgroup_df),
+    }
+
+    report_path = REPORT_DIR / "phase7_production_qualification.json"
+
+    report_path.write_text(json.dumps(report, indent=2), encoding="utf-8")
+
+    # --------------------------------------------------------
+    # CONSOLE OUTPUT
+    # --------------------------------------------------------
+
+    print()
+    print("=" * 72)
+    print("PHASE 7 PRODUCTION QUALIFICATION")
+    print("=" * 72)
+
+    print()
+    print(f"Frozen classification ROC-AUC: {raw_test_cls['roc_auc']:.4f}")
+
+    print(f"Frozen classification PR-AUC:  {raw_test_cls['pr_auc']:.4f}")
+
+    print(f"Frozen classification F1 @ 0.50: {raw_test_cls['f1']:.4f}")
+
+    print(f"Regression MAE: {raw_test_reg['mae']:.4f}")
+
+    print()
+    print(f"Development-selected threshold: {selected_threshold:.2f}")
+
+    print(f"Final-test F1 @ selected threshold: {final_policy_metrics['f1']:.4f}")
+
+    print(f"Final-test precision: {final_policy_metrics['precision']:.4f}")
+
+    print(f"Final-test recall: {final_policy_metrics['recall']:.4f}")
+
+    print()
+    print(
+        f"Calibration MAE: {valid_calibration['mean_absolute_calibration_error']:.4f}"
+    )
+
+    print(
+        "Calibration maximum error: "
+        f"{valid_calibration['maximum_calibration_error']:.4f}"
+    )
+
+    print()
+    print(f"Artifact integrity: {'PASS' if artifact_gate else 'FAIL'}")
+
+    print(f"Session integrity: {'PASS' if session_gate else 'FAIL'}")
+
+    print(f"Feature contract: {'PASS' if feature_gate else 'FAIL'}")
+
+    print(f"Reproducibility: {'PASS' if reproducibility_gate else 'FAIL'}")
+
+    print(
+        f"Calibration review: "
+        f"{'REQUIRED' if calibration_review_required else 'NOT REQUIRED'}"
+    )
+
+    print()
+    print(f"PHASE 7 STATUS: {release_status}")
+
+    print()
+    print(f"Report: {report_path}")
+
+    print(f"Contract: {contract_path}")
+
+    print(f"Thresholds: {REPORT_DIR / 'phase7_threshold_policy.csv'}")
+
+    print(f"Subgroups: {REPORT_DIR / 'phase7_subgroup_gate.csv'}")
+
+    print("=" * 72)
+
+
+if __name__ == "__main__":
+    main()

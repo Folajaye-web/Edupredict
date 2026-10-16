@@ -1,0 +1,48 @@
+STDOUT
+========================================================================
+EDUPREDICT NIGERIA VALIDATION — PHASE 7
+========================================================================
+Purpose: Production Qualification / Release Gate
+
+Training rows:       52,830
+Validation rows:     52,260
+Development rows:    105,090
+Final test rows:     51,840
+
+
+Loading frozen Phase 5 models...
+Classification model: LOADED
+Regression model:     LOADED
+
+========================================================================
+PHASE 7 PRODUCTION QUALIFICATION
+========================================================================
+
+Frozen classification ROC-AUC: 0.9560
+Frozen classification PR-AUC:  0.7870
+Frozen classification F1 @ 0.50: 0.6998
+Regression MAE: 5.1776
+
+Development-selected threshold: 0.40
+Final-test F1 @ selected threshold: 0.6983
+Final-test precision: 0.6719
+Final-test recall: 0.7270
+
+Calibration MAE: 0.0046
+Calibration maximum error: 0.0157
+
+Artifact integrity: PASS
+Session integrity: PASS
+Feature contract: PASS
+Reproducibility: PASS
+Calibration review: REQUIRED
+
+PHASE 7 STATUS: CONDITIONAL_REVIEW
+
+Report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7_production_qualification.json
+Contract: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7_production_contract.json
+Thresholds: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7_threshold_policy.csv
+Subgroups: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7_subgroup_gate.csv
+========================================================================
+
+STDERR

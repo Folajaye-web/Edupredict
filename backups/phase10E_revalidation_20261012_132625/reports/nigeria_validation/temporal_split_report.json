@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "input_file": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\leakage_safe_features.csv",
+  "input_rows": 156930,
+  "sessions": [
+    "2023/2024",
+    "2024/2025",
+    "2025/2026"
+  ],
+  "split_mapping": {
+    "2023/2024": "train",
+    "2024/2025": "validation",
+    "2025/2026": "test"
+  },
+  "split_sessions": {
+    "train": [
+      "2023/2024"
+    ],
+    "validation": [
+      "2024/2025"
+    ],
+    "test": [
+      "2025/2026"
+    ]
+  },
+  "split_rows": {
+    "train": 52830,
+    "validation": 52260,
+    "test": 51840
+  },
+  "student_counts": {
+    "train": 1761,
+    "validation": 1742,
+    "test": 1728
+  },
+  "student_overlap": {
+    "train_validation": 1473,
+    "train_test": 1185,
+    "validation_test": 1454
+  },
+  "target_statistics": {
+    "train": {
+      "rows": 52830,
+      "below_credit_count": 10953,
+      "below_credit_rate_pct": 20.732538330494037,
+      "exam_mean": 34.34853303047511,
+      "exam_median": 34.0
+    },
+    "validation": {
+      "rows": 52260,
+      "below_credit_count": 10848,
+      "below_credit_rate_pct": 20.757749712973595,
+      "exam_mean": 34.40369307309606,
+      "exam_median": 34.0
+    },
+    "test": {
+      "rows": 51840,
+      "below_credit_count": 6574,
+      "below_credit_rate_pct": 12.681327160493828,
+      "exam_mean": 37.49471450617284,
+      "exam_median": 37.0
+    }
+  },
+  "forbidden_predictors": [
+    "Exam",
+    "Total",
+    "Grade",
+    "Final_Year_Result",
+    "Promotion_Status",
+    "Intervention"
+  ],
+  "forbidden_predictors_present": [],
+  "outputs": {
+    "train": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\train_2023_2024.csv",
+    "validation": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\validation_2024_2025.csv",
+    "test": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\splits\\test_2025_2026.csv"
+  }
+}

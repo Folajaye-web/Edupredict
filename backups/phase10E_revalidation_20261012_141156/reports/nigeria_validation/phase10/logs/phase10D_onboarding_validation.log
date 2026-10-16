@@ -1,0 +1,16 @@
+STDOUT
+====================================================================
+EDUPREDICT PHASE 10D — SCHOOL ONBOARDING VALIDATION
+====================================================================
+Status: PASS
+Input: C:\Users\l2e\OneDrive\Desktop\Nigeria_Student_Records_2023_2026_Combined.csv
+Rows: 156930
+Failed checks: 0
+Report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase10\phase10D_school_onboarding.json
+Database modified: False
+Models modified: False
+Import performed: False
+Pilot authorised: False
+====================================================================
+
+STDERR

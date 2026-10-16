@@ -1,0 +1,20 @@
+STDOUT
+========================================================================
+EDUPREDICT NIGERIA VALIDATION — PHASE 5
+========================================================================
+Development: 2023/2024 + 2024/2025 | FINAL HOLDOUT: 2025/2026
+
+Regression validation: MAE=3.6434 RMSE=4.6040 R2=0.7699
+Regression FINAL:      MAE=5.1776 RMSE=6.4748 R2=0.6099
+
+Classification validation: ROC-AUC=0.9765 PR-AUC=0.9213 F1=0.8287 Brier=0.0492
+Classification FINAL:      ROC-AUC=0.9560 PR-AUC=0.7870 Precision=0.7139 Recall=0.6862 F1=0.6998 Brier=0.0549
+Confusion matrix: {'tn': 43458, 'fp': 1808, 'fn': 2063, 'tp': 4511}
+
+Report: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase5_final_holdout_results.json
+Models: C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation
+
+PHASE 5 STATUS: PASS
+Production release is NOT authorized by Phase 5 alone.
+
+STDERR

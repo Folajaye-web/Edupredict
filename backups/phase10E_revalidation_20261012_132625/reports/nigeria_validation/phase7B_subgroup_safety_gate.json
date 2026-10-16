@@ -1,0 +1,38 @@
+{
+  "project": "EduPredict",
+  "phase": "7B",
+  "gate": "Subgroup Safety Gate",
+  "status": "PASS",
+  "test_session": "2025/2026",
+  "threshold": 0.4,
+  "minimum_rows": 100,
+  "criteria": {
+    "roc_auc_min": 0.85,
+    "f1_min": 0.55,
+    "recall_min": 0.5,
+    "precision_min": 0.5,
+    "brier_max": 0.15
+  },
+  "dimensions": [
+    "School",
+    "Class",
+    "Arm",
+    "Term",
+    "Subject"
+  ],
+  "global_metrics": {
+    "roc_auc": 0.9560145074100805,
+    "pr_auc": 0.7861198536775633,
+    "precision": 0.6713443727196183,
+    "recall": 0.7277152418618801,
+    "f1": 0.6983941605839417,
+    "brier": 0.05488789371818192,
+    "threshold": 0.4,
+    "rows": 51840
+  },
+  "subgroup_count": 43,
+  "passing_subgroups": 43,
+  "failing_subgroups": 0,
+  "review_subgroups": 0,
+  "model_sha256": "3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+}

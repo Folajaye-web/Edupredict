@@ -1,0 +1,11 @@
+gate,status,detail
+dataset_exists,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+dataset_load,PASS,"51,840 rows"
+session_contract,PASS,expected=['2025/2026']; actual=['2025/2026']
+Historical_Subject_Average_missing,PASS,observed=4135; first_term=4135
+Historical_Overall_Average_missing,PASS,observed=274; first_term=274
+historical_structural_missingness,PASS,structural=4409; unexpected=0
+non_historical_missingness,PASS,missing=0
+duplicate_rows,PASS,duplicates=0
+historical_count_consistency,PASS,"{""subject_missing_average_with_count"": 0, ""overall_missing_average_with_count"": 0}"
+production_data_quality_contract,PASS,"First-term historical averages are permitted to be unavailable where no prior history exists; unexpected missingness, duplicate rows, and session-contract failures remain production failures."

@@ -1,0 +1,84 @@
+{
+  "project": "EduPredict",
+  "phase": "10C",
+  "timestamp_utc": "2026-10-12T10:38:41.079262+00:00",
+  "purpose": "Separate technical development readiness, school onboarding, governance evidence and live-pilot authorisation",
+  "status": "BLOCKED",
+  "development_status": "READY",
+  "school_onboarding_status": "PENDING_SCHOOL_ENGAGEMENT",
+  "governance_status": "PENDING_EVIDENCE",
+  "pilot_authorisation_status": "NOT_AUTHORISED",
+  "pilot_authorised": false,
+  "technical_checks_passed": 7,
+  "technical_checks_failed": 0,
+  "technical_checks": [
+    {
+      "check": "project_root",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL"
+    },
+    {
+      "check": "classification_model_exists",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_classification_hgb.joblib"
+    },
+    {
+      "check": "classification_model_identity",
+      "status": "PASS",
+      "detail": "expected=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a; actual=3cc65dbd4c0e48ba65b28f713a8d32d9fec8bf0631dc8a3b5ef15e00823f608a"
+    },
+    {
+      "check": "regression_model_exists",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\models\\nigeria_validation\\phase5_regression_hgb.joblib"
+    },
+    {
+      "check": "regression_model_identity",
+      "status": "PASS",
+      "detail": "expected=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e; actual=f61b02c5542aa0a4d2d0c1b18540f05193cc5d0c5f1f4e5a46ae5a75e0a9973e"
+    },
+    {
+      "check": "phase9G_evidence",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase9\\phase9G_continuous_production_orchestrator.json"
+    },
+    {
+      "check": "phase10B_evidence",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\phase10B_production_readiness_audit.json"
+    }
+  ],
+  "governance_controls_total": 13,
+  "governance_controls_verified": 0,
+  "governance_controls_unverified": 13,
+  "governance_blockers": [
+    "pilot_scope_approved",
+    "data_processing_authorised",
+    "data_access_reviewed",
+    "retention_and_deletion_defined",
+    "human_review_procedure_approved",
+    "consequential_decision_safeguard",
+    "fairness_evaluation_approved",
+    "real_world_metrics_defined",
+    "intervention_workflow_defined",
+    "incident_and_appeal_process_approved",
+    "rollback_and_shutdown_tested",
+    "staff_training_completed",
+    "pilot_success_criteria_approved"
+  ],
+  "governance_checklist_csv": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\phase10C_pilot_governance_checklist.csv",
+  "production_database_modified": false,
+  "production_models_modified": false,
+  "automatic_model_replacement": false,
+  "automatic_retraining": false,
+  "automatic_retraining_performed": false,
+  "scheduled_task_triggered": false,
+  "limitations": [
+    "Development readiness is not live-school or production authorisation.",
+    "School onboarding remains pending until applicable school-specific requirements are supplied and reviewed.",
+    "A governance row requires VERIFIED status, an evidence reference, reviewer and review date; this script does not validate the substance or authenticity of evidence.",
+    "This script never authorises a live pilot automatically.",
+    "Do not place student names, IDs or other personal data in the governance checklist.",
+    "Predictions remain advisory and must not independently determine promotion, punishment, exclusion or other consequential outcomes."
+  ]
+}

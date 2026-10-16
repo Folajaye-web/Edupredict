@@ -1,0 +1,188 @@
+{
+  "project": "EduPredict",
+  "phase": "10D",
+  "timestamp_utc": "2026-10-12T10:51:00.945868+00:00",
+  "status": "PASS",
+  "purpose": "Read-only school-file onboarding and data-quality validation",
+  "input_supplied": true,
+  "input_file": "C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv",
+  "file_sha256": "658033f1e5e67d9b6cdc2b082a51dcb0aa2ac4d184530fefe262303af95e7c67",
+  "rows": 156930,
+  "columns": [
+    "Student_ID",
+    "School",
+    "Academic_Session",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Exam",
+    "Total",
+    "Grade",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Term_Grade",
+    "Previous_Year_Average",
+    "Behaviour/Engagement",
+    "Intervention",
+    "Final_Year_Result",
+    "Promotion_Status"
+  ],
+  "required_columns": [
+    "Student_ID",
+    "School",
+    "Academic_Session",
+    "Term",
+    "Class",
+    "Subject",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Exam",
+    "Total",
+    "Grade"
+  ],
+  "missing_columns": [],
+  "missing_required_cells": {
+    "Student_ID": 0,
+    "School": 0,
+    "Academic_Session": 0,
+    "Term": 0,
+    "Class": 0,
+    "Subject": 0,
+    "CA1": 0,
+    "CA2": 0,
+    "Assignment": 0,
+    "Project": 0,
+    "Exam": 0,
+    "Total": 0,
+    "Grade": 0
+  },
+  "invalid_score_counts": {
+    "CA1": 0,
+    "CA2": 0,
+    "Assignment": 0,
+    "Project": 0,
+    "Exam": 0,
+    "Total": 0
+  },
+  "duplicate_key_rows": 0,
+  "total_mismatch_rows": 0,
+  "checks": [
+    {
+      "check": "project_root",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL"
+    },
+    {
+      "check": "phase10C_report_exists",
+      "status": "PASS",
+      "detail": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\phase10C_controlled_pilot_readiness.json"
+    },
+    {
+      "check": "non_empty_file",
+      "status": "PASS",
+      "detail": "rows=156930"
+    },
+    {
+      "check": "unique_column_headers",
+      "status": "PASS",
+      "detail": "none"
+    },
+    {
+      "check": "required_columns",
+      "status": "PASS",
+      "detail": "all present"
+    },
+    {
+      "check": "duplicate_result_keys",
+      "status": "PASS",
+      "detail": "rows participating in duplicate keys=0; keys=['School', 'Academic_Session', 'Term', 'Student_ID', 'Subject']"
+    },
+    {
+      "check": "required_cells_complete",
+      "status": "PASS",
+      "detail": "missing required cells=0"
+    },
+    {
+      "check": "CA1_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "CA2_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "Assignment_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "Project_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "Exam_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "Total_range_0_to_100",
+      "status": "PASS",
+      "detail": "out-of-range values=0"
+    },
+    {
+      "check": "total_matches_component_sum",
+      "status": "PASS",
+      "detail": "mismatches=0; confirm school scoring rules before use"
+    },
+    {
+      "check": "School_not_blank",
+      "status": "PASS",
+      "detail": "blank values=0"
+    },
+    {
+      "check": "Academic_Session_not_blank",
+      "status": "PASS",
+      "detail": "blank values=0"
+    },
+    {
+      "check": "Term_not_blank",
+      "status": "PASS",
+      "detail": "blank values=0"
+    },
+    {
+      "check": "Class_not_blank",
+      "status": "PASS",
+      "detail": "blank values=0"
+    },
+    {
+      "check": "Subject_not_blank",
+      "status": "PASS",
+      "detail": "blank values=0"
+    }
+  ],
+  "issues": [],
+  "database_modified": false,
+  "models_modified": false,
+  "automatic_retraining": false,
+  "automatic_model_replacement": false,
+  "import_performed": false,
+  "pilot_authorised": false,
+  "limitations": [
+    "This is a read-only validation; no records are imported.",
+    "The default template expects assessment components on a 0-100 scale. Confirm the school's scoring scheme before applying it.",
+    "Grade labels and promotion decisions are not independently validated by this initial script.",
+    "Passing checks does not prove the source records are authentic, that a school approved processing, or that the model is suitable for live use.",
+    "Use only data you are authorised to access; avoid including unnecessary personal data in reports."
+  ]
+}

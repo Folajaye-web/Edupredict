@@ -1,0 +1,62 @@
+{
+  "project": "EduPredict",
+  "phase": "10E",
+  "timestamp_utc": "2026-10-12T12:32:03.254098+00:00",
+  "status": "FAILED_CORE_STAGE",
+  "purpose": "Single backup-first revalidation workflow to align the historical feature pipeline and dependent quality gates.",
+  "dataset": "C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv",
+  "dataset_sha256": "658033f1e5e67d9b6cdc2b082a51dcb0aa2ac4d184530fefe262303af95e7c67",
+  "feature_pipeline_version_expected": "2.0-period-safe-school-aware",
+  "runtime_scikit_learn": "1.9.0",
+  "backup_directory": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\backups\\phase10E_revalidation_20261012_132625",
+  "stages": [
+    {
+      "stage": "dataset_audit",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\audit_dataset.py",
+      "started_utc": "2026-10-12T12:26:25.827694+00:00",
+      "return_code": 0,
+      "stdout_tail": "======================================================================\nEDUPREDICT NIGERIAN DATASET MODEL-QUALITY AUDIT\n======================================================================\nDataset: C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv\n\nRows: 156,930\nColumns: 23\n\n[1] Required columns: PASS\n[2] Duplicate complete rows: 0\n    Duplicate prediction keys: 0\n\n[3] Numeric range checks\n    CA1                     :      0 violations\n    CA2                     :      0 violations\n    Assignment              :      0 violations\n    Project                 :      0 violations\n    Exam                    :      0 violations\n    Total                   :      0 violations\n    Attendance              :      0 violations\n    Previous_Term_Total     :      0 violations\n    Previous_Year_Average   :      0 violations\n\n[4] Total formula errors: 0\n[5] Grade consistency errors: 0\n\n[6] Dataset dimensions\n    2023/2024: 52,830\n    2024/2025: 52,260\n    2025/2026: 51,840\n    First Term: 52,310\n    Second Term: 52,310\n    Third Term: 52,310\n    Schools:   12\n    Students:  2304\n    Subjects:  20\n    Classes:   6\n    Arms:      2\n\n[7] Behaviour/Engagement categories\n    Good: 50,410\n    Fair: 40,430\n    Poor: 38,750\n    Excellent: 27,340\n\n[8] Temporal reconstruction\n    Comparable rows: 131,100\n    Matches:         131,100\n    Mismatches:      0\n    Mismatch rate:   0.0000%\n\n[9] End-of-year field timing\n    Final_Year_Result:\n      First Term: 0\n      Second Term: 0\n      Third Term: 52,310\n    Promotion_Status:\n      First Term: 0\n      Second Term: 0\n      Third Term: 52,310\n\n[10] Leakage boundary\n    EXCLUDED from predictors:\n      - Exam\n      - Total\n      - Grade\n      - Final_Year_Result\n      - Promotion_Status\n\n======================================================================\nAUDIT STATUS: PASS\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\dataset_audit.json\n======================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T12:26:29.752137+00:00"
+    },
+    {
+      "stage": "phase10D_onboarding_validation",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\phase10D_school_onboarding.py",
+      "started_utc": "2026-10-12T12:26:29.753746+00:00",
+      "return_code": 0,
+      "stdout_tail": "====================================================================\nEDUPREDICT PHASE 10D \u2014 SCHOOL ONBOARDING VALIDATION\n====================================================================\nStatus: PASS\nInput: C:\\Users\\l2e\\OneDrive\\Desktop\\Nigeria_Student_Records_2023_2026_Combined.csv\nRows: 156930\nFailed checks: 0\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\phase10D_school_onboarding.json\nDatabase modified: False\nModels modified: False\nImport performed: False\nPilot authorised: False\n====================================================================\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T12:26:32.291854+00:00"
+    },
+    {
+      "stage": "feature_build",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\build_features.py",
+      "started_utc": "2026-10-12T12:26:32.293166+00:00",
+      "return_code": 0,
+      "stdout_tail": "========================================================================\nEDUPREDICT \u2014 CORRECTED LEAKAGE-SAFE FEATURE BUILDER\n========================================================================\nInput rows: 156,930\nOutput rows: 156,930\nSchools: 12; school/student pairs: 2,304\nSubject temporal violations: 0\nOverall temporal violations: 0\nSame-term outcomes used in history: False\nFeature file: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\data\\nigeria_validation\\leakage_safe_features.csv\nReport: C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\feature_build_report.json\nPHASE 2 FEATURE BUILD: PASS\n",
+      "stderr_tail": "",
+      "status": "PASS",
+      "completed_utc": "2026-10-12T12:31:59.297119+00:00"
+    },
+    {
+      "stage": "temporal_splits",
+      "script": "C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\create_temporal_splits.py",
+      "started_utc": "2026-10-12T12:31:59.298223+00:00",
+      "return_code": 1,
+      "stdout_tail": "========================================================================\nEDUPREDICT PHASE 3\nTIME-AWARE HISTORICAL TRAIN / VALIDATION / TEST SPLIT\n========================================================================\nInput rows: 156,930\nInput columns: 24\n\n[1] Session inventory\n    2023/2024\n    2024/2025\n    2025/2026\n[2] Chronological session ordering: PASS\n\n[3] Split sizes\n    Train:      52,830\n    Validation: 52,260\n    Test:       51,840\n[4] One-session-per-split check: PASS\n[5] Session overlap check: PASS\n[6] Strict chronological ordering: PASS\n\n[7] Student continuity analysis\n    Train students: 1,761\n    Validation students: 1,742\n    Test students: 1,728\n",
+      "stderr_tail": "Traceback (most recent call last):\n  File \"C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\create_temporal_splits.py\", line 583, in <module>\n    main()\n    ~~~~^^\n  File \"C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\scripts\\nigeria_validation\\create_temporal_splits.py\", line 357, in main\n    print(\n    ~~~~~^\n        f\"    Train \\u2192 Validation overlap: \"\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n        f\"{len(train_validation_overlap):,}\"\n        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n    )\n    ^\n  File \"C:\\Python314\\Lib\\encodings\\cp1252.py\", line 19, in encode\n    return codecs.charmap_encode(input,self.errors,encoding_table)[0]\n           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nUnicodeEncodeError: 'charmap' codec can't encode character '\\u2192' in position 10: character maps to <undefined>\n",
+      "status": "FAIL",
+      "completed_utc": "2026-10-12T12:32:03.250890+00:00"
+    }
+  ],
+  "stop_reason": "temporal_splits did not pass; downstream stages were not run. See C:\\Users\\l2e\\OneDrive\\Desktop\\EduPredict_MASTER_FINAL\\reports\\nigeria_validation\\phase10\\logs.",
+  "database_modified": false,
+  "production_model_directory_modified": false,
+  "candidate_model_directory_rebuilt": false,
+  "school_file_import_performed": false,
+  "automatic_model_replacement": false,
+  "automatic_pilot_authorisation": false,
+  "next_step": "Correct the failed stage using its saved log, then rerun this same workflow."
+}

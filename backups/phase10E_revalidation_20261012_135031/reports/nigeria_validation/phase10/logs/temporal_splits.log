@@ -1,0 +1,45 @@
+STDOUT
+========================================================================
+EDUPREDICT PHASE 3
+TIME-AWARE HISTORICAL TRAIN / VALIDATION / TEST SPLIT
+========================================================================
+Input rows: 156,930
+Input columns: 24
+
+[1] Session inventory
+    2023/2024
+    2024/2025
+    2025/2026
+[2] Chronological session ordering: PASS
+
+[3] Split sizes
+    Train:      52,830
+    Validation: 52,260
+    Test:       51,840
+[4] One-session-per-split check: PASS
+[5] Session overlap check: PASS
+[6] Strict chronological ordering: PASS
+
+[7] Student continuity analysis
+    Train students: 1,761
+    Validation students: 1,742
+    Test students: 1,728
+
+STDERR
+Traceback (most recent call last):
+  File "C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\scripts\nigeria_validation\create_temporal_splits.py", line 583, in <module>
+    main()
+    ~~~~^^
+  File "C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\scripts\nigeria_validation\create_temporal_splits.py", line 357, in main
+    print(
+    ~~~~~^
+        f"    Train \u2192 Validation overlap: "
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        f"{len(train_validation_overlap):,}"
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Python314\Lib\encodings\cp1252.py", line 19, in encode
+    return codecs.charmap_encode(input,self.errors,encoding_table)[0]
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+UnicodeEncodeError: 'charmap' codec can't encode character '\u2192' in position 10: character maps to <undefined>

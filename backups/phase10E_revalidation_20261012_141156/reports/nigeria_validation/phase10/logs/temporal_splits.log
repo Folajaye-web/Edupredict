@@ -1,0 +1,54 @@
+STDOUT
+========================================================================
+EDUPREDICT PHASE 3
+TIME-AWARE HISTORICAL TRAIN / VALIDATION / TEST SPLIT
+========================================================================
+Input rows: 156,930
+Input columns: 24
+
+[1] Session inventory
+    2023/2024
+    2024/2025
+    2025/2026
+[2] Chronological session ordering: PASS
+
+[3] Split sizes
+    Train:      52,830
+    Validation: 52,260
+    Test:       51,840
+[4] One-session-per-split check: PASS
+[5] Session overlap check: PASS
+[6] Strict chronological ordering: PASS
+
+[7] Student continuity analysis
+    Train students: 1,761
+    Validation students: 1,742
+    Test students: 1,728
+    Train -> Validation overlap: 1,473
+    Train -> Test overlap: 1,185
+    Validation -> Test overlap: 1,454
+
+[8] Predictor leakage boundary: PASS
+
+[9] Target distributions
+    Train      : rows=52,830, below-credit=20.73%, exam_mean=34.35
+    Validation : rows=52,260, below-credit=20.76%, exam_mean=34.40
+    Test       : rows=51,840, below-credit=12.68%, exam_mean=37.49
+
+========================================================================
+PHASE 3 STATUS: PASS
+========================================================================
+
+Training:
+C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\train_2023_2024.csv
+
+Validation:
+C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\validation_2024_2025.csv
+
+Final test:
+C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+
+Report:
+C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\temporal_split_report.json
+
+STDERR

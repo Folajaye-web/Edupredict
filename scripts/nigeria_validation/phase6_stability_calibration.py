@@ -1,0 +1,659 @@
+from pathlib import Path
+import json
+import warnings
+
+import numpy as np
+import pandas as pd
+import joblib
+
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+    roc_auc_score,
+    average_precision_score,
+    precision_score,
+    recall_score,
+    f1_score,
+    accuracy_score,
+    brier_score_loss,
+    confusion_matrix,
+)
+from sklearn.calibration import calibration_curve
+
+warnings.filterwarnings("ignore")
+
+
+# ============================================================
+# EDUPREDICT NIGERIA VALIDATION — PHASE 6
+# Stability, Calibration and Error Analysis
+# ============================================================
+
+ROOT = Path(__file__).resolve().parents[2]
+
+DATA_DIR = ROOT / "data" / "nigeria_validation" / "splits"
+MODEL_DIR = ROOT / "models" / "nigeria_validation"
+REPORT_DIR = ROOT / "reports" / "nigeria_validation"
+
+REPORT_DIR.mkdir(parents=True, exist_ok=True)
+
+TEST = DATA_DIR / "test_2025_2026.csv"
+
+CLASSIFIER = MODEL_DIR / "phase5_classification_hgb.joblib"
+REGRESSOR = MODEL_DIR / "phase5_regression_hgb.joblib"
+
+
+CAT = [
+    "School",
+    "Term",
+    "Class",
+    "Arm",
+    "Gender",
+    "Subject",
+]
+
+NUM = [
+    "Term_Number",
+    "CA1",
+    "CA2",
+    "Assignment",
+    "Project",
+    "Attendance",
+    "Previous_Term_Total",
+    "Previous_Year_Average",
+    "Previous_Term_Grade_Numeric",
+    "Historical_Subject_Average",
+    "Historical_Subject_Count",
+    "Historical_Overall_Average",
+    "Historical_Overall_Count",
+]
+
+TARGET_REG = "target_exam_score"
+TARGET_CLS = "target_below_credit"
+
+
+# ============================================================
+# DATA LOADING
+# ============================================================
+
+
+def load_test():
+    df = pd.read_csv(TEST)
+
+    required = set(CAT + NUM + [TARGET_REG, TARGET_CLS])
+
+    missing = sorted(required - set(df.columns))
+
+    if missing:
+        raise RuntimeError(f"{TEST.name}: missing required columns: {missing}")
+
+    sessions = sorted(df["Academic_Session"].astype(str).unique())
+
+    if sessions != ["2025/2026"]:
+        raise RuntimeError(f"Unexpected test session: {sessions}")
+
+    return df
+
+
+def X(df):
+    return df[CAT + NUM]
+
+
+# ============================================================
+# METRIC HELPERS
+# ============================================================
+
+
+def regression_metrics(y_true, y_pred):
+    return {
+        "mae": float(mean_absolute_error(y_true, y_pred)),
+        "rmse": float(np.sqrt(mean_squared_error(y_true, y_pred))),
+        "r2": float(r2_score(y_true, y_pred)),
+    }
+
+
+def classification_metrics(y_true, probability, threshold=0.5):
+    predicted = (np.asarray(probability) >= threshold).astype(int)
+
+    tn, fp, fn, tp = confusion_matrix(
+        y_true,
+        predicted,
+        labels=[0, 1],
+    ).ravel()
+
+    return {
+        "roc_auc": float(roc_auc_score(y_true, probability)),
+        "pr_auc": float(average_precision_score(y_true, probability)),
+        "precision": float(
+            precision_score(
+                y_true,
+                predicted,
+                zero_division=0,
+            )
+        ),
+        "recall": float(
+            recall_score(
+                y_true,
+                predicted,
+                zero_division=0,
+            )
+        ),
+        "f1": float(
+            f1_score(
+                y_true,
+                predicted,
+                zero_division=0,
+            )
+        ),
+        "accuracy": float(
+            accuracy_score(
+                y_true,
+                predicted,
+            )
+        ),
+        "brier": float(
+            brier_score_loss(
+                y_true,
+                probability,
+            )
+        ),
+        "threshold": float(threshold),
+        "tn": int(tn),
+        "fp": int(fp),
+        "fn": int(fn),
+        "tp": int(tp),
+        "n": int(len(y_true)),
+        "positive_prevalence": float(np.mean(y_true)),
+    }
+
+
+# ============================================================
+# SUBGROUP ANALYSIS
+# ============================================================
+
+
+def subgroup_analysis(
+    df,
+    group_column,
+    y_reg,
+    reg_pred,
+    y_cls,
+    probability,
+):
+    rows = []
+
+    for group_value, idx in df.groupby(
+        group_column,
+        dropna=False,
+    ).groups.items():
+        idx = list(idx)
+
+        yreg = y_reg.loc[idx]
+        preg = pd.Series(
+            reg_pred,
+            index=df.index,
+        ).loc[idx]
+
+        ycls = y_cls.loc[idx]
+        pcls = pd.Series(
+            probability,
+            index=df.index,
+        ).loc[idx]
+
+        try:
+            reg = regression_metrics(
+                yreg,
+                preg,
+            )
+        except Exception:
+            reg = {
+                "mae": None,
+                "rmse": None,
+                "r2": None,
+            }
+
+        try:
+            cls = classification_metrics(
+                ycls,
+                pcls,
+                threshold=0.5,
+            )
+        except Exception:
+            cls = {
+                "roc_auc": None,
+                "pr_auc": None,
+                "precision": None,
+                "recall": None,
+                "f1": None,
+                "accuracy": None,
+                "brier": None,
+                "threshold": 0.5,
+                "tn": None,
+                "fp": None,
+                "fn": None,
+                "tp": None,
+                "n": len(idx),
+                "positive_prevalence": None,
+            }
+
+        rows.append(
+            {
+                group_column: str(group_value),
+                "rows": len(idx),
+                **reg,
+                **cls,
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+
+# ============================================================
+# CALIBRATION
+# ============================================================
+
+
+def calibration_analysis(y_true, probability, n_bins=10):
+    y_true = np.asarray(y_true, dtype=int)
+    probability = np.asarray(probability, dtype=float)
+
+    if len(y_true) != len(probability) or len(y_true) == 0:
+        raise ValueError("Calibration inputs must be non-empty and equal in length.")
+
+    if not np.isfinite(probability).all():
+        raise ValueError("Calibration probabilities contain non-finite values.")
+
+    if ((probability < 0) | (probability > 1)).any():
+        raise ValueError("Calibration probabilities must be between 0 and 1.")
+
+    # Match sklearn's quantile-bin calculation and retain each bin's counts.
+    bin_edges = np.percentile(
+        probability,
+        np.linspace(0, 100, n_bins + 1),
+    )
+    bin_ids = np.searchsorted(bin_edges[1:-1], probability)
+
+    bin_count = np.bincount(bin_ids, minlength=n_bins)
+    positive_count = np.bincount(bin_ids, weights=y_true, minlength=n_bins)
+    probability_sum = np.bincount(bin_ids, weights=probability, minlength=n_bins)
+
+    rows = []
+    display_bin = 1
+
+    for i in range(n_bins):
+        count = int(bin_count[i])
+        if count == 0:
+            continue
+
+        predicted = probability_sum[i] / count
+        actual = positive_count[i] / count
+
+        rows.append(
+            {
+                "bin": display_bin,
+                "sample_count": count,
+                "positive_count": int(positive_count[i]),
+                "mean_predicted_probability": float(predicted),
+                "observed_positive_rate": float(actual),
+                "absolute_calibration_error": float(abs(predicted - actual)),
+            }
+        )
+        display_bin += 1
+
+    return pd.DataFrame(rows)
+
+
+# ============================================================
+# THRESHOLD ANALYSIS
+# ============================================================
+
+
+def threshold_analysis(
+    y_true,
+    probability,
+):
+    rows = []
+
+    thresholds = np.arange(
+        0.20,
+        0.71,
+        0.05,
+    )
+
+    for threshold in thresholds:
+        predicted = (probability >= threshold).astype(int)
+
+        tn, fp, fn, tp = confusion_matrix(
+            y_true,
+            predicted,
+            labels=[0, 1],
+        ).ravel()
+
+        rows.append(
+            {
+                "threshold": float(round(threshold, 2)),
+                "precision": float(
+                    precision_score(
+                        y_true,
+                        predicted,
+                        zero_division=0,
+                    )
+                ),
+                "recall": float(
+                    recall_score(
+                        y_true,
+                        predicted,
+                        zero_division=0,
+                    )
+                ),
+                "f1": float(
+                    f1_score(
+                        y_true,
+                        predicted,
+                        zero_division=0,
+                    )
+                ),
+                "accuracy": float(
+                    accuracy_score(
+                        y_true,
+                        predicted,
+                    )
+                ),
+                "true_negative": int(tn),
+                "false_positive": int(fp),
+                "false_negative": int(fn),
+                "true_positive": int(tp),
+                "flagged": int(predicted.sum()),
+            }
+        )
+
+    return pd.DataFrame(rows)
+
+
+# ============================================================
+# MAIN
+# ============================================================
+
+
+def main():
+
+    print("=" * 72)
+    print("EDUPREDICT NIGERIA VALIDATION — PHASE 6")
+    print("=" * 72)
+
+    print("Purpose: frozen Phase 5 model stability, calibration and error analysis")
+
+    print(f"Final holdout: {TEST}")
+
+    # --------------------------------------------------------
+    # Load frozen Phase 5 artifacts
+    # --------------------------------------------------------
+
+    if not CLASSIFIER.exists():
+        raise FileNotFoundError(f"Missing classifier: {CLASSIFIER}")
+
+    if not REGRESSOR.exists():
+        raise FileNotFoundError(f"Missing regressor: {REGRESSOR}")
+
+    classifier = joblib.load(CLASSIFIER)
+
+    regressor = joblib.load(REGRESSOR)
+
+    # --------------------------------------------------------
+    # Load untouched 2025/26 holdout
+    # --------------------------------------------------------
+
+    test = load_test()
+
+    print(f"Holdout rows: {len(test):,}")
+
+    # --------------------------------------------------------
+    # Reproduce frozen Phase 5 predictions
+    # --------------------------------------------------------
+
+    features = X(test)
+
+    y_reg = test[TARGET_REG]
+
+    y_cls = test[TARGET_CLS].astype(int)
+
+    regression_prediction = regressor.predict(features)
+
+    classification_probability = classifier.predict_proba(features)[:, 1]
+
+    # --------------------------------------------------------
+    # Overall frozen-model metrics
+    # --------------------------------------------------------
+
+    overall_regression = regression_metrics(
+        y_reg,
+        regression_prediction,
+    )
+
+    overall_classification = classification_metrics(
+        y_cls.to_numpy(),
+        classification_probability,
+        threshold=0.5,
+    )
+
+    # --------------------------------------------------------
+    # Calibration
+    # --------------------------------------------------------
+
+    calibration = calibration_analysis(
+        y_cls.to_numpy(),
+        classification_probability,
+        n_bins=10,
+    )
+
+    calibration_path = REPORT_DIR / "phase6_calibration.csv"
+
+    calibration.to_csv(
+        calibration_path,
+        index=False,
+    )
+
+    # --------------------------------------------------------
+    # Threshold analysis
+    # --------------------------------------------------------
+
+    thresholds = threshold_analysis(
+        y_cls.to_numpy(),
+        classification_probability,
+    )
+
+    threshold_path = REPORT_DIR / "phase6_thresholds.csv"
+
+    thresholds.to_csv(
+        threshold_path,
+        index=False,
+    )
+
+    # --------------------------------------------------------
+    # Subgroup analyses
+    # --------------------------------------------------------
+
+    subgroup_specs = {
+        "School": "phase6_school_metrics.csv",
+        "Class": "phase6_class_metrics.csv",
+        "Arm": "phase6_arm_metrics.csv",
+        "Term": "phase6_term_metrics.csv",
+        "Subject": "phase6_subject_metrics.csv",
+    }
+
+    subgroup_outputs = {}
+
+    for column, filename in subgroup_specs.items():
+        if column not in test.columns:
+            print(f"Skipping subgroup {column}: column not present.")
+            continue
+
+        result = subgroup_analysis(
+            test,
+            column,
+            y_reg,
+            regression_prediction,
+            y_cls,
+            classification_probability,
+        )
+
+        output_path = REPORT_DIR / filename
+
+        result.to_csv(
+            output_path,
+            index=False,
+        )
+
+        subgroup_outputs[column] = str(output_path)
+
+    # --------------------------------------------------------
+    # Save prediction evidence
+    # --------------------------------------------------------
+
+    prediction_columns = [
+        column
+        for column in [
+            "Student_ID",
+            "School",
+            "Academic_Session",
+            "Term",
+            "Class",
+            "Arm",
+            "Gender",
+            "Subject",
+            "Term_Number",
+        ]
+        if column in test.columns
+    ]
+
+    predictions = test[prediction_columns].copy()
+
+    predictions["actual_exam_score"] = y_reg.to_numpy()
+
+    predictions["predicted_exam_score"] = regression_prediction
+
+    predictions["actual_below_credit"] = y_cls.to_numpy()
+
+    predictions["predicted_below_credit_probability"] = classification_probability
+
+    predictions["predicted_below_credit_0_5"] = (
+        classification_probability >= 0.5
+    ).astype(int)
+
+    prediction_path = REPORT_DIR / "phase6_holdout_predictions.csv"
+
+    predictions.to_csv(
+        prediction_path,
+        index=False,
+    )
+
+    # --------------------------------------------------------
+    # Summary JSON
+    # --------------------------------------------------------
+
+    report = {
+        "phase": 6,
+        "status": "DIAGNOSTIC_COMPLETE",
+        "protocol": {
+            "purpose": (
+                "Frozen Phase 5 final-holdout stability and calibration analysis"
+            ),
+            "holdout_session": "2025/2026",
+            "model_retrained": False,
+            "model_tuned": False,
+            "threshold_selected": False,
+            "classification_threshold_baseline": 0.5,
+        },
+        "rows": {"final_holdout": int(len(test))},
+        "overall_metrics": {
+            "regression": overall_regression,
+            "classification": overall_classification,
+        },
+        "calibration": {
+            "bins": int(len(calibration)),
+            "mean_absolute_bin_error": float(
+                calibration["absolute_calibration_error"].mean()
+            ),
+            "max_absolute_bin_error": float(
+                calibration["absolute_calibration_error"].max()
+            ),
+        },
+        "outputs": {
+            "calibration": str(calibration_path),
+            "thresholds": str(threshold_path),
+            "predictions": str(prediction_path),
+            "subgroups": subgroup_outputs,
+        },
+        "interpretation": {
+            "note": (
+                "Phase 6 is diagnostic. "
+                "The 2025/2026 holdout remains frozen. "
+                "No model or threshold selection is performed "
+                "from this holdout."
+            )
+        },
+    }
+
+    report_path = REPORT_DIR / "phase6_stability_calibration.json"
+
+    report_path.write_text(
+        json.dumps(
+            report,
+            indent=2,
+        ),
+        encoding="utf-8",
+    )
+
+    # --------------------------------------------------------
+    # Console summary
+    # --------------------------------------------------------
+
+    print()
+    print("OVERALL FROZEN MODEL RESULTS")
+    print(f"Regression MAE:  {overall_regression['mae']:.4f}")
+    print(f"Regression RMSE: {overall_regression['rmse']:.4f}")
+    print(f"Regression R2:   {overall_regression['r2']:.4f}")
+
+    print()
+
+    print(f"ROC-AUC: {overall_classification['roc_auc']:.4f}")
+
+    print(f"PR-AUC:  {overall_classification['pr_auc']:.4f}")
+
+    print(f"Precision: {overall_classification['precision']:.4f}")
+
+    print(f"Recall: {overall_classification['recall']:.4f}")
+
+    print(f"F1: {overall_classification['f1']:.4f}")
+
+    print(f"Brier: {overall_classification['brier']:.4f}")
+
+    print()
+
+    print(
+        "Calibration mean absolute bin error: "
+        f"{report['calibration']['mean_absolute_bin_error']:.4f}"
+    )
+
+    print(
+        "Calibration maximum bin error: "
+        f"{report['calibration']['max_absolute_bin_error']:.4f}"
+    )
+
+    print()
+
+    print(f"Calibration report: {calibration_path}")
+
+    print(f"Threshold report: {threshold_path}")
+
+    print(f"Prediction evidence: {prediction_path}")
+
+    print(f"Phase 6 report: {report_path}")
+
+    print()
+    print("PHASE 6 STATUS: DIAGNOSTIC_COMPLETE")
+    print("No production release decision is made by Phase 6.")
+
+
+if __name__ == "__main__":
+    main()

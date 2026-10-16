@@ -1,0 +1,28 @@
+gate,item,status,detail
+artifact_exists,train_2023_2024.csv,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\train_2023_2024.csv
+artifact_exists,validation_2024_2025.csv,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\validation_2024_2025.csv
+artifact_exists,test_2025_2026.csv,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\data\nigeria_validation\splits\test_2025_2026.csv
+artifact_exists,phase5_classification_hgb.joblib,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_classification_hgb.joblib
+artifact_exists,phase5_regression_hgb.joblib,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\models\nigeria_validation\phase5_regression_hgb.joblib
+artifact_exists,phase7A_artifact_gate.json,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7A_artifact_gate.json
+artifact_exists,phase7B_subgroup_safety_gate.json,PASS,C:\Users\l2e\OneDrive\Desktop\EduPredict_MASTER_FINAL\reports\nigeria_validation\phase7B_subgroup_safety_gate.json
+dataset_load,train_2023_2024.csv,PASS,"52,830 rows"
+session_integrity,train_2023_2024.csv,PASS,expected=2023/2024; actual=['2023/2024']
+feature_contract,train_2023_2024.csv,PASS,production feature contract valid
+dataset_load,validation_2024_2025.csv,PASS,"52,260 rows"
+session_integrity,validation_2024_2025.csv,PASS,expected=2024/2025; actual=['2024/2025']
+feature_contract,validation_2024_2025.csv,PASS,production feature contract valid
+dataset_load,test_2025_2026.csv,PASS,"51,840 rows"
+session_integrity,test_2025_2026.csv,PASS,expected=2025/2026; actual=['2025/2026']
+feature_contract,test_2025_2026.csv,PASS,production feature contract valid
+model_loadability,classification,PASS,Pipeline
+model_loadability,regression,PASS,Pipeline
+classification_prediction,2025/2026 final test,PASS,"51,840 predictions"
+regression_prediction,2025/2026 final test,PASS,"51,840 predictions"
+reproducibility,classification predictions,PASS,max_absolute_difference=0
+phase7A,artifact_and_contract_gate,PASS,PASS
+phase7B,subgroup_safety_gate,PASS,PASS
+threshold_policy,classification threshold,PASS,selected_threshold=0.40
+production_contract,Phase 7 contract,FAIL,qualification_status=CONDITIONAL_REVIEW; required=TECHNICAL_QUALIFICATION_PASS; or feature/forbidden-predictor/threshold contract mismatch
+environment_record,runtime dependencies,PASS,"{""python"": ""3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]"", ""python_executable"": ""C:\\Users\\l2e\\OneDrive\\Desktop\\.venv\\Scripts\\python.exe"", ""numpy"": ""2.5.3"", ""pandas"": ""3.0.6"", ""scikit_learn"": ""1.9.0"", ""joblib"": ""1.6.0""}"
+feature_pipeline_provenance,Corrected feature/model provenance,PASS,feature_version=2.0-period-safe-school-aware; phase5_version=2.0-period-safe-school-aware; source_hash_match=True; scikit_learn=1.9.0
